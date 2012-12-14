@@ -1,0 +1,13 @@
+target/**/*
+.DS_Store
+bin/**/*
+.classpath
+.project
+.settings
+eclipse
+tmp
+modules
+lib
+test-result
+logs
+precompiled
