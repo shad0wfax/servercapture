@@ -11,3 +11,5 @@ lib
 test-result
 logs
 precompiled
+.cache
+bin
