@@ -49,8 +49,9 @@ object Application extends Controller {
 		println("image data = \n\n" + imageData)
 
 		val base64: Base64 = new Base64
+		val imageDir = Play.current.configuration.getString("image.store.dir").get
 		//val file = new FileWriter("/Users/srivatsasharma/Downloads/out.png")
-		val file = new FileOutputStream(new File("/Users/srivatsasharma/Downloads/out.png"));
+		val file = new FileOutputStream(new File(imageDir + "out.png"));
 		val decoded = base64 decode(imageData)
 		
 		println("decoded image data = \n\n" + decoded)
