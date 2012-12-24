@@ -6,6 +6,7 @@ import org.apache.commons.codec.binary.Base64
 import org.apache.commons.io.IOUtils
 import java.io.FileOutputStream
 import java.io.File
+import java.util.UUID
 import play.api.libs.json._
 //
 
@@ -46,17 +47,23 @@ object Application extends Controller {
 		//val imageData
 
 		println(issue.get + "\n\n")
-		println("image data = \n\n" + imageData)
+		//println("image data = \n\n" + imageData)
 
 		val base64: Base64 = new Base64
 		val imageDir = Play.current.configuration.getString("image.store.dir").get
 		//val file = new FileWriter("/Users/srivatsasharma/Downloads/out.png")
-		val file = new FileOutputStream(new File(imageDir + "out.png"));
+		val fileName = UUID.randomUUID().toString()
+		val file = new FileOutputStream(new File(imageDir + fileName + ".png"));
 		val decoded = base64 decode(imageData)
 		
-		println("decoded image data = \n\n" + decoded)
+		//println("decoded image data = \n\n" + decoded)
 
-		IOUtils.write(decoded, file);
+		// TODO: Rewrite this using the Loan pattern? https://wiki.scala-lang.org/display/SYGN/Loan
+		try {
+			IOUtils.write(decoded, file);
+		} finally {
+		  if (file != null) file.close();
+		}
 		//file.write(decoded)
 
 		Ok("200")
