@@ -2,12 +2,11 @@ package controllers
 
 import play.api._
 import play.api.mvc._
-import org.apache.commons.codec.binary.Base64
-import org.apache.commons.io.IOUtils
-import java.io.FileOutputStream
-import java.io.File
-import java.util.UUID
 import play.api.libs.json._
+import models.ImageCapture
+
+import anorm._
+
 //
 
 object Application extends Controller {
@@ -16,8 +15,9 @@ object Application extends Controller {
     Ok(views.html.index("Your new application is ready."))
   }
   
+  
   // 10 MB size limit for now
-  def capture = Action(parse.urlFormEncoded(maxLength = 1024 * 1024)) { request =>
+  def captureImage = Action(parse.urlFormEncoded(maxLength = 1024 * 1024)) { request =>
 	val body: Map[String, Seq[String]] = request.body
 	val dataBody: Option[Seq[String]] = body.get("data") 
 
@@ -48,24 +48,13 @@ object Application extends Controller {
 
 		println(issue.get + "\n\n")
 		//println("image data = \n\n" + imageData)
-
-		val base64: Base64 = new Base64
-		val imageDir = Play.current.configuration.getString("image.store.dir").get
-		//val file = new FileWriter("/Users/srivatsasharma/Downloads/out.png")
-		val fileName = UUID.randomUUID().toString()
-		val file = new FileOutputStream(new File(imageDir + fileName + ".png"));
-		val decoded = base64 decode(imageData)
 		
-		//println("decoded image data = \n\n" + decoded)
+		val capture = ImageCapture.createFromBase64(ImageCapture(NotAssigned, issue.get, ""), imageData)
 
-		// TODO: Rewrite this using the Loan pattern? https://wiki.scala-lang.org/display/SYGN/Loan
-		try {
-			IOUtils.write(decoded, file);
-		} finally {
-		  if (file != null) file.close();
-		}
-		//file.write(decoded)
-
+		// Testing:
+		println(ImageCapture.all())
+		
+		
 		Ok("200")
 	}.getOrElse {
 		println("data parameter not sent in the request body")
@@ -74,5 +63,4 @@ object Application extends Controller {
 
   	
   }
-  
 }
