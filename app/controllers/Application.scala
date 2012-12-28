@@ -1,3 +1,6 @@
+/**
+ * copyright VisualRendezvous
+ */
 package controllers
 
 import play.api._
@@ -9,6 +12,10 @@ import anorm._
 
 //
 
+/**
+ * @author Akshay Sharma
+ * Dec 23, 2012
+ */
 object Application extends Controller {
   
   def index = Action {

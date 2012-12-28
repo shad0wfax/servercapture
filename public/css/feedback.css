@@ -552,3 +552,57 @@ button.feedback-btn.small, input[type="submit"].feedback-btn.small {
     -moz-transform: translateY(-21px);
   }
 }
+
+
+/* Akshay Added */
+.feedback-bottom-right2 {
+    position:fixed;
+    bottom:5px;
+    right:120px;
+}
+
+.vrendezvous-canvas {
+    display: none;
+}
+.vrendezvous-video, .vrendezvous-img {
+    display: block;
+    float: left;
+    border: 10px solid #fff;
+    border-radius: 10px;
+}
+
+.vrendezvous-feedback-modal {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 13px;
+    line-height: 18px;
+    color: #333;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    z-index: 2050;
+    max-height: 800px;
+    overflow: auto;
+    width: 660px;
+    margin: -250px 0 0 -280px;
+    background-color: #ffffff;
+    border: 1px solid #999;
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    *border: 1px solid #999;
+    /* IE6-7 */
+
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    border-radius: 6px;
+    -webkit-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+    -moz-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+    -webkit-background-clip: padding-box;
+    -moz-background-clip: padding-box;
+    background-clip: padding-box;
+
+
+    -webkit-transition: all 2s ease 0s;
+    -moz-transition: all 2s ease 0s;  
+    -ms-transition: all 2s ease 0s; 
+    -o-transition: all 2s ease 0s;
+}

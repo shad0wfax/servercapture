@@ -1,3 +1,6 @@
+/**
+ * copyright VisualRendezvous
+ */
 package models
 
 import play.api._
@@ -14,6 +17,10 @@ import java.io.File
 import java.util.UUID
 
 
+/**
+ * @author Akshay Sharma
+ * Dec 25, 2012
+ */
 case class ImageCapture(id: Pk[Long], feedback: String, imageId: String)
 
 object ImageCapture {

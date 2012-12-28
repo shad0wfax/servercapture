@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<!-- saved from url=(0054)http://twitter.github.com/bootstrap/examples/hero.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <title>Bootstrap, from Twitter</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Le styles -->
+    <link rel="stylesheet" href="css/bootstrap.css"  type="text/css" media="screen" />
+
+    <style type="text/css">
+      body {
+        padding-top: 60px;
+        padding-bottom: 40px;
+      }
+      
+      	html {
+		    background: #111111;
+		    height: 100%;
+		    background: linear-gradient( #333, #000);
+		}
+		canvas {
+		    display: none;
+		}
+		video, img, #startbutton {
+		    display: block;
+		    float: left;
+		    border: 10px solid #fff;
+		    border-radius: 10px;
+		}
+		#startbutton {
+		    background: green;
+		    border: none;
+		    color: #fff;
+		    margin: 100px 20px 20px 20px;
+		    padding: 10px 20px;
+		    font-size: 20px;
+		}
+		#container {
+		    overflow: hidden;
+		    width: 880px;
+		    margin: 20px auto;
+		}
+		​
+    </style>
+
+  </head>
+
+  <body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href="#_">Webcam Photo Example</a>
+          <div class="nav-collapse collapse">
+            <ul class="nav">
+              <li class="active"><a href="#_">Home</a></li>
+              <li><a href="#_">About</a></li>
+              <li><a href="#_">Contact</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+
+		<video id="video"></video>
+		<button id="startbutton">Take photo</button>
+		<canvas id="canvas"></canvas>
+		<img src="http://placekitten.com/g/320/261" id="photo" alt="photo">
+
+    </div> <!-- /container -->
+
+    <!-- Le javascript -->
+    <script src="js/jquery.js"></script>
+    
+    <script type="text/javascript">
+    (function() {
+
+    	  var streaming = false,
+    	      video        = document.querySelector('#video'),
+    	      cover        = document.querySelector('#cover'),
+    	      canvas       = document.querySelector('#canvas'),
+    	      photo        = document.querySelector('#photo'),
+    	      startbutton  = document.querySelector('#startbutton'),
+    	      width = 200,
+    	      height = 0;
+
+    	  navigator.getMedia = ( navigator.getUserMedia || 
+    	                         navigator.webkitGetUserMedia ||
+    	                         navigator.mozGetUserMedia ||
+    	                         navigator.msGetUserMedia);
+
+    	  navigator.getMedia(
+    	    { 
+    	      video: true, 
+    	      audio: false 
+    	    },
+    	    function(stream) {
+    	      if (navigator.mozGetUserMedia) { 
+    	        video.mozSrcObject = stream;
+    	      } else {
+    	        var vendorURL = window.URL || window.webkitURL;
+    	        video.src = vendorURL ? vendorURL.createObjectURL(stream) : stream;
+    	      }
+    	      video.play();
+    	    },
+    	    function(err) {
+    	      console.log("An error occured! " + err);
+    	    }
+    	  );
+
+    	  video.addEventListener('canplay', function(ev){
+    	    if (!streaming) {
+    	      height = video.videoHeight / (video.videoWidth/width);
+    	      video.setAttribute('width', width);
+    	      video.setAttribute('height', height);
+    	      canvas.setAttribute('width', width);
+    	      canvas.setAttribute('height', height);
+    	      streaming = true;
+    	    }
+    	  }, false);
+
+    	  function takepicture() {
+    	    canvas.width = width;
+    	    canvas.height = height;
+    	    canvas.getContext('2d').drawImage(video, 0, 0, width, height);
+    	    var data = canvas.toDataURL('image/png');
+    	    photo.setAttribute('src', data);
+    	  }
+
+    	  startbutton.addEventListener('click', function(ev){
+    	      takepicture();
+    	    ev.preventDefault();
+    	  }, false);
+
+    	})();
+
+    
+    </script>
+</body></html>
