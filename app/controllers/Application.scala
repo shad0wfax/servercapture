@@ -29,7 +29,8 @@ object Application extends Controller {
 	val dataBody: Option[Seq[String]] = body.get("data") 
 
 	// Expecting data body
-
+	// println("Testing to see if data :: dataBody = " + dataBody)
+	
 	dataBody.map { datas =>
 		//println("Testing to see if data :: data = " + data)
 		//for (data <- datas) println("Akshay == ******** " + data + " *********\n\n")
@@ -41,7 +42,14 @@ object Application extends Controller {
 
 		//println("Testing to see if data :: json = \n" + json)
 
-		val issue: Option[String] = (json \\ "Issue")(0).asOpt[String]
+		val issues = (json \\ "Issue")
+		
+		val issue: Option[String] = issues match {
+		  case Nil => Some("")
+		  case _ => issues(0).asOpt[String]
+		}
+		
+		//val issue: Option[String] = (json \\ "Issue")(0).asOpt[String]
 
 		//println("Testing to see if data :: issue = \n" + issue)
 

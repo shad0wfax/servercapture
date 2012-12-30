@@ -868,10 +868,6 @@ window.Feedback.XHR.prototype.send = function( data, callback ) {
             callback( (xhr.status === 200) );
         }
     };
-
-    alert(this.url);
-    alert(data);
-    
     xhr.open( "POST", this.url, true);
     xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     var dataToSend = encodeURIComponent( window.JSON.stringify(data));
