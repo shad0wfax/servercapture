@@ -546,7 +546,7 @@ window.snapPhoto.Photo.prototype.data = function() {
         return this._data;
     }
 
-	//return "buahahahaha"
+	//return
 	var data = '',
     canvasImg = document.getElementById("vrendezvous-canvas");
     

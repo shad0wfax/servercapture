@@ -96,12 +96,14 @@ window.Feedback = function( options ) {
     options.messageSuccess = options.messageSuccess || "Your feedback was sent succesfully.";
     options.messageError = options.messageError || "There was an error sending your feedback to the server.";
     
+    options.emailLabel =  options.emailLabel || "Email adress (optional)";
+    options.feedbackLabel =  options.feedbackLabel || "Additional comments (optional)";
   
     if (options.pages === undefined ) {
         options.pages = [
-            new window.Feedback.Form(),
-            new window.Feedback.Screenshot( options ),
-            new window.Feedback.Review()
+            new window.Feedback.Screenshot(options),
+            //new window.Feedback.Form(),
+            new window.Feedback.Review(options)
         ];
     }
 
@@ -117,9 +119,9 @@ window.Feedback = function( options ) {
             currentPage = 0;
             for (; currentPage < len; currentPage++) {
                 // create DOM for each page in the wizard
-                if ( !(options.pages[ currentPage ] instanceof window.Feedback.Review) ) {
+                //if ( !(options.pages[ currentPage ] instanceof window.Feedback.Review) ) {
                     options.pages[ currentPage ].render();
-                }
+                //}
             }
 
             var a = element("a", "×"),
@@ -162,17 +164,21 @@ window.Feedback = function( options ) {
                     }
                 }
                 
-                emptyElements( modalBody );
-
                 if ( currentPage === len ) {
+                	
+                	// Gather of data from the review page before emptying :) 
+                	options.pages[currentPage - 1].data();
+                    emptyElements( modalBody );
+
                     returnMethods.send( options.adapter );
                 } else {
+                    emptyElements( modalBody );
 
                     options.pages[ currentPage ].start( modal, modalHeader, modalFooter, nextButton );
                     
                     if ( options.pages[ currentPage ] instanceof window.Feedback.Review ) {
                         // create DOM for review page, based on collected data
-                        options.pages[ currentPage ].render( options.pages );
+                        options.pages[ currentPage ].reviewIt( options.pages );
                     }
                     
                     // add page DOM to modal
@@ -206,6 +212,11 @@ window.Feedback = function( options ) {
             modal.appendChild( modalFooter );
 
             document.body.appendChild( modal );
+            
+            // akshay added: 
+            // Call start of page 0 (modified to photo capture page directly now)
+            options.pages[ 0 ].start( modal, modalHeader, modalFooter, nextButton );
+
         },
 
 
@@ -409,19 +420,38 @@ window.Feedback.Form.prototype.review = function( dom ) {
     return dom;
      
 };
-window.Feedback.Review = function() {
-
-    this.dom = document.createElement("div");
-    this.dom.className = "feedback-review";
-
+window.Feedback.Review = function(options) {
+    this.options = options || {};
 };
 
 window.Feedback.Review.prototype = new window.Feedback.Page();
 
-window.Feedback.Review.prototype.render = function( pages ) {
+window.Feedback.Review.prototype.render = function() {
+    this.dom = document.createElement("div");
+    this.dom.className = "feedback-review";
+    return this;
+};
 
-    var i = 0, len = pages.length, item;
+window.Feedback.Review.prototype.start = function( modal, modalHeader, modalFooter, nextButton ) {
     emptyElements( this.dom );
+
+    var email = document.createElement("input");
+    var feedback = document.createElement("textarea");
+    email.id = "vrendezvous-email";
+    feedback.id = "vrendezvous-feedback";
+    email.type = "text";
+    email.placeholder = this.options.emailLabel;
+    feedback.placeholder = this.options.feedbackLabel;
+    
+    this.dom.appendChild(email);
+    this.dom.appendChild(feedback);
+
+    return this;
+};
+
+window.Feedback.Review.prototype.reviewIt = function( pages ) {
+    var i = 0, len = pages.length, item;
+    //emptyElements( this.dom );
     
     for (; i < len; i++) {
         
@@ -434,7 +464,32 @@ window.Feedback.Review.prototype.render = function( pages ) {
 
 };
 
+window.Feedback.Review.prototype.review = function( dom ) {
+    return this.data();
+};
 
+
+window.Feedback.Review.prototype.data = function() {
+    if ( this._data !== undefined ) {
+        return this._data;
+    }
+	
+//	var data = '';
+    var data = {}
+        
+    var email = document.getElementById("vrendezvous-email");
+    var feedback = document.getElementById("vrendezvous-feedback");
+    
+    if (email == undefined || feedback == undefined) {
+    	return this._data;
+    }
+    
+    data["email"] = email.value.length == 0 ? "" : email.value;
+    data["comments"] = feedback.value.length == 0 ? "" : feedback.value;
+
+    // cache and return data
+    return ( this._data = data );
+}
 
 
 window.Feedback.Screenshot = function( options ) {
@@ -768,7 +823,8 @@ window.Feedback.Screenshot.prototype.data = function() {
     if ( this._data !== undefined ) {
         return this._data;
     }
-
+    var data = {};
+    
     if ( this.h2cCanvas !== undefined ) {
       
         var ctx = this.h2cCanvas.getContext("2d"),
@@ -832,7 +888,10 @@ window.Feedback.Screenshot.prototype.data = function() {
         // to avoid security error break for tainted canvas   
         try {
             // cache and return data
-            return ( this._data = this.h2cCanvas.toDataURL() );
+        	data["image"] = this.h2cCanvas.toDataURL();
+        	this._data = data;
+        	
+            return (this._data);
         } catch( e ) {}
         
     }
@@ -844,8 +903,9 @@ window.Feedback.Screenshot.prototype.review = function( dom ) {
     var data = this.data();
     if ( data !== undefined ) {
         var img = new Image();
-        img.src = data;
+        img.src = data["image"];
         img.style.width = "300px";
+        //img.style.height = "300px";
         dom.appendChild( img );
     }
     
@@ -860,7 +920,6 @@ window.Feedback.XHR = function( url ) {
 window.Feedback.XHR.prototype = new window.Feedback.Send();
 
 window.Feedback.XHR.prototype.send = function( data, callback ) {
-    
     var xhr = this.xhr;
     
     xhr.onreadystatechange = function() {
