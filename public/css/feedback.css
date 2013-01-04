@@ -568,9 +568,11 @@ button.feedback-btn.small, input[type="submit"].feedback-btn.small {
     color: #333;
     position: fixed;
     z-index: 2050;
-    max-height: 800px;
     overflow: auto;
-/*    top: 50%;
+	max-height: 800px;
+	min-height: 580px;
+/*  
+	top: 50%;
     left: 50%;
 	width: 800px;
     height: 600px;
@@ -579,7 +581,6 @@ button.feedback-btn.small, input[type="submit"].feedback-btn.small {
     top: 10%;
     left: 10%;
     width: 80%;
-    height:80%;
 	
 	background-color: #ffffff;
     border: 1px solid #999;
@@ -605,7 +606,7 @@ button.feedback-btn.small, input[type="submit"].feedback-btn.small {
 }
 
 .photo-feedback-modal h3 {
-    margin: 10px 10px 0px 10px;
+    margin: 10px 10px 0px 0px;
 	line-height: 27px;
     font-size: 18px;
     font-weight: bold;
@@ -675,8 +676,9 @@ button.feedback-btn.small, input[type="submit"].feedback-btn.small {
     overflow: hidden;
     width: 100%;
     min-height: 400px;
-    margin: 20px auto;
+    margin: 0px auto;
 }
+
 .vrendezvous-canvas {
     display: none;
 }
@@ -725,6 +727,26 @@ button.feedback-btn.small, input[type="submit"].feedback-btn.small {
 	height: 20px;
 }
 
+.email-comment-for-photo {
+    overflow: auto;
+    width: 100%;
+    min-height: 30px;
+    margin: 5px auto;
+}
+
+.email-comment-for-photo input[type=text] {
+    margin: 0 10px 0 0 !important;
+    height: 20px !important;
+    width: 30% !important;
+}
+
+.email-comment-for-photo textarea {
+    margin: 0 !important;
+    height: 20px !important;
+    width: 60% !important;
+    float: right;
+}
+
 .feedback-review textarea:focus {
     border-color: rgba(82, 168, 236, 0.8);
     -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(82, 168, 236, 0.6);
@@ -734,4 +756,10 @@ button.feedback-btn.small, input[type="submit"].feedback-btn.small {
     outline: thin dotted \9;
     /* IE6-9 */
 
+}
+
+.feedback-takeapicture {
+	position: absolute;
+	left: 0;
+	margin-left: 80px;
 }

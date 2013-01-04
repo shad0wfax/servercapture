@@ -94,7 +94,11 @@ window.snapPhoto = function( options ) {
     options.messageSuccess = options.messageSuccess || "Your feedback was sent succesfully.";
     options.messageError = options.messageError || "There was an error sending your feedback to the server.";
     
-  
+    options.emailLabel =  options.emailLabel || "Email adress (optional)";
+    options.feedbackLabel =  options.feedbackLabel || "Additional comments (optional)";
+    options.takeAPictureMsg =  options.takeAPictureMsg || "Clicking on the button will start your webcam and prompt you to grant it permission. You can cancel anytime.";
+    options.takeAPictureLabel =  options.takeAPictureLabel || "Click";
+    
     if (options.pages === undefined ) {
         options.pages = [
 			new window.snapPhoto.Photo( options )
@@ -113,9 +117,7 @@ window.snapPhoto = function( options ) {
             currentPage = 0;
             for (; currentPage < len; currentPage++) {
                 // create DOM for each page in the wizard
-                if ( !(options.pages[ currentPage ] instanceof window.snapPhoto.Review) ) {
-                    options.pages[ currentPage ].render();
-                }
+                options.pages[ currentPage ].render();
             }
 
             var a = element("a", "×"),
@@ -150,6 +152,10 @@ window.snapPhoto = function( options ) {
             
             nextButton.className =  "feedback-btn";
             nextButton.onclick = function() {
+            	// Remove the header/footer stuff added
+            	modalHeader.removeChild(document.getElementById('vrendezvous-webcammsg'));
+            	modalFooter.removeChild(document.getElementById('vrendezvous-clickbtn'));
+            	
             	// Just send
             	 returnMethods.send( options.adapter );
             };
@@ -278,121 +284,6 @@ window.snapPhoto.Send.prototype = {
 
 };
 
-window.snapPhoto.Form = function( elements ) {
-
-    this.elements = elements || [{
-        type: "textarea",
-        name: "Issue",
-        label: "Please describe the issue you are experiencing",
-        required: false
-    }];
-
-    this.dom = document.createElement("div");
-
-};
-
-window.snapPhoto.Form.prototype = new window.snapPhoto.Page();
-
-window.snapPhoto.Form.prototype.render = function() {
-
-    var i = 0, len = this.elements.length, item;
-    emptyElements( this.dom );
-    for (; i < len; i++) {
-        item = this.elements[ i ];
-
-        switch( item.type ) {
-            case "textarea":
-                this.dom.appendChild( element("label", item.label + ":" + (( item.required === true ) ? " *" : "")) );
-                this.dom.appendChild( ( item.element = document.createElement("textarea")) );
-                break;
-        }
-    }
-
-    return this;
-
-};
-
-window.snapPhoto.Form.prototype.end = function() {
-    // form validation  
-    var i = 0, len = this.elements.length, item;
-    for (; i < len; i++) {
-        item = this.elements[ i ];
-
-        // check that all required fields are entered
-        if ( item.required === true && item.element.value.length === 0) {
-            item.element.className = "feedback-error";
-            return false;
-        } else {
-            item.element.className = "";
-        }
-    }
-    
-    return true;
-    
-};
-
-window.snapPhoto.Form.prototype.data = function() {
-    
-    if ( this._data !== undefined ) {
-        // return cached value
-        return this._data;
-    }
-    
-    var i = 0, len = this.elements.length, item, data = {};
-    
-    for (; i < len; i++) {
-        item = this.elements[ i ];
-        data[ item.name ] = item.element.value;
-    }
-    
-    // cache and return data
-    return ( this._data = data );
-};
-
-
-window.snapPhoto.Form.prototype.review = function( dom ) {
-  
-    var i = 0, item, len = this.elements.length;
-      
-    for (; i < len; i++) {
-        item = this.elements[ i ];
-        
-        if (item.element.value.length > 0) {
-            dom.appendChild( element("label", item.name + ":") );
-            dom.appendChild( document.createTextNode( item.element.value.length ) );
-            dom.appendChild( document.createElement( "hr" ) );
-        }
-        
-    }
-    
-    return dom;
-     
-};
-window.snapPhoto.Review = function() {
-
-    this.dom = document.createElement("div");
-    this.dom.className = "feedback-review";
-
-};
-
-window.snapPhoto.Review.prototype = new window.snapPhoto.Page();
-
-window.snapPhoto.Review.prototype.render = function( pages ) {
-
-    var i = 0, len = pages.length, item;
-    emptyElements( this.dom );
-    
-    for (; i < len; i++) {
-        
-        // get preview DOM items
-        pages[ i ].review( this.dom );
-
-    }
-
-    return this;
-
-};
-
 window.snapPhoto.Photo = function( options ) {
     this.options = options || {};
 
@@ -494,25 +385,8 @@ window.snapPhoto.Photo.prototype.start = function( modal, modalHeader, modalFoot
 		    ev.preventDefault();
 		  }, false);
 
-        },
+        };
                 
-        photoButton = element("a", "Take a picture"),
-        cancelButton = element("a", "Cancel");
-
-        
-        var buttonItem = [ photoButton, cancelButton ];
-        
-        this.dom.appendChild( element("p", "Clicking on Take a picture will start your webcam and prompt you to grant it permission. You can cancel anytime.") );
-
-        // add highlight and blackout buttons
-        for (var i = 0; i < 2; i++ ) {
-            buttonItem[ i ].className = 'feedback-btn feedback-btn-small ' + (i === 0 ? 'active' : 'feedback-btn-inverse');
-            buttonItem[ i ].href = "#";
-            buttonItem[ i ].onclick = (i == 0) ? photobuttonClickFunction : cancelbuttonClickFunction;
-            this.dom.appendChild( buttonItem[ i ] );
-            this.dom.appendChild( document.createTextNode(" ") );
-        }
-    
         var photoContainer = document.createElement('div');
         photoContainer.id = "photo-container";
         photoContainer.className = "photo-container";
@@ -533,7 +407,42 @@ window.snapPhoto.Photo.prototype.start = function( modal, modalHeader, modalFoot
         photoContainer.appendChild(videoElem);
         photoContainer.appendChild(canvasElem);
         photoContainer.appendChild(photoElem);
-      
+        
+        //var buttonItem = [ photoButton, cancelButton ];
+        var photoButton = element("a", this.options.takeAPictureLabel);
+//        	cancelButton = element("a", "Cancel");
+
+        var picDiv = document.createElement("div");
+//        pivDiv.appendChild( element("span
+        
+        var webcamMsg = element("span", this.options.takeAPictureMsg)
+        webcamMsg.id = "vrendezvous-webcammsg";
+        modalHeader.appendChild(webcamMsg);
+
+        // add highlight and blackout buttons
+        photoButton.className = 'btn btn-primary btn-small feedback-takeapicture';
+        photoButton.href = "#";
+        photoButton.id = "vrendezvous-clickbtn";
+        photoButton.onclick = photobuttonClickFunction;
+        modalFooter.appendChild( photoButton );
+        modalFooter.appendChild( document.createTextNode(" ") );
+
+        var emailContainer = document.createElement('div');
+        emailContainer.id = "email-container";
+        emailContainer.className = "email-comment-for-photo";
+        this.dom.appendChild( emailContainer );
+   
+        var email = document.createElement("input");
+        var feedback = document.createElement("textarea");
+        email.id = "vrendezvous-email";
+        feedback.id = "vrendezvous-feedback";
+        email.type = "text";
+        email.placeholder = this.options.emailLabel;
+        feedback.placeholder = this.options.feedbackLabel;
+        
+        emailContainer.appendChild(email);
+        emailContainer.appendChild(feedback);
+
 };
 
 window.snapPhoto.Photo.prototype.render = function() {    
@@ -547,10 +456,15 @@ window.snapPhoto.Photo.prototype.data = function() {
     }
 
 	//return
-	var data = '',
-    canvasImg = document.getElementById("vrendezvous-canvas");
-    
-    data = canvasImg.toDataURL('image/png');
+	var data = {};
+    var canvasImg = document.getElementById("vrendezvous-canvas");
+    var email = document.getElementById("vrendezvous-email");
+    var feedback = document.getElementById("vrendezvous-feedback");
+
+    data["image"] = canvasImg.toDataURL('image/png');
+    data["email"] = email.value.length == 0 ? "" : email.value;
+    data["comments"] = feedback.value.length == 0 ? "" : feedback.value;
+
     this._data = data;
 	return this._data;
 };
