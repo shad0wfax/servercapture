@@ -21,7 +21,7 @@ import java.util.UUID
  * @author Akshay Sharma
  * Dec 25, 2012
  */
-case class ImageCapture(id: Pk[Long], feedback: String, imageId: String)
+case class ImageCapture(id: Pk[Long], email: String, comment: String, imageId: String)
 
 object ImageCapture {
     /**
@@ -29,9 +29,10 @@ object ImageCapture {
    */
   val simple = {
     get[Pk[Long]]("image_capture.id") ~
-    get[String]("image_capture.feedback") ~
+    get[String]("image_capture.email") ~
+    get[String]("image_capture.comment") ~
     get[String]("image_capture.image_id") map {
-      case id~feedback~imageId => ImageCapture(id, feedback, imageId)
+      case id~email~comment~imageId => ImageCapture(id, email, comment, imageId)
     }
   }
 
@@ -42,12 +43,13 @@ object ImageCapture {
     DB.withConnection { implicit connection =>
       SQL(
         """
-          insert into image_capture(image_id, feedback) values (
-            {image_id}, {feedback}
+          insert into image_capture(image_id, email, comment) values (
+            {image_id}, {email}, {comment}
           )
         """
       ).on(
-        'feedback -> captureWithImageId.feedback,
+        'email -> captureWithImageId.email,
+        'comment -> captureWithImageId.comment,
         'image_id -> captureWithImageId.imageId
       ).executeUpdate()
     }

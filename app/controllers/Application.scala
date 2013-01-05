@@ -7,8 +7,15 @@ import play.api._
 import play.api.mvc._
 import play.api.libs.json._
 import models.ImageCapture
-
 import anorm._
+import play.api.Play.current
+import play.api.libs.concurrent.Execution.Implicits._
+import scala.collection.immutable.Map
+import scala.concurrent.duration._
+import play.libs.Akka
+import models.Capture
+import models.Image
+import akka.actor.Props
 
 //
 
@@ -19,7 +26,9 @@ import anorm._
 object Application extends Controller {
   
   def index = Action {
-    Ok(views.html.index("Your new application is ready."))
+//    Ok(views.html.index("Your new application is ready."))
+	  Redirect("/assets/index.html")
+    
   }
   
   
@@ -32,42 +41,18 @@ object Application extends Controller {
 	// println("Testing to see if data :: dataBody = " + dataBody)
 	
 	dataBody.map { datas =>
-		val jsonString: String = datas(0)
-
-		val json: JsValue = Json.parse(jsonString)
-
-		//Logger.debug("Testing to see if data :: json = \n" + json)
-
-		val email = element(json \\ "email")
-		val comment = element(json \\ "comments")
-		val image = element(json \\ "image")
-		
-		Logger.debug(email + "\n\n")
-		Logger.debug(comment + "\n\n")
-		Logger.debug(image + "\n\n")
-		
-		val imageData: String = image.substring("data:image/png;base64,".length())
-		val capture = ImageCapture.createFromBase64(ImageCapture(NotAssigned, comment, ""), imageData)
-
-		// Testing:
-		println(ImageCapture.all())
-		
-		Ok("200")
+	  val captureActor = Akka.system.actorOf(Props(new Capture()))
+	  val imageCapture = new Image(datas)
+	  
+	  // TODO: Improve Akka usage - follow webchat sample instead of scheduling mechanism (message sending)
+	  // Schedule right away
+	  Akka.system.scheduler.scheduleOnce(0 second, captureActor, imageCapture)
+	  
+	  Ok("200")
 	}.getOrElse {
 		println("data parameter not sent in the request body")
     	BadRequest("Expecting urlFormEncoded data request body")  
   	}
   }
-  
-  private def element(jsonObj: Seq[JsValue]): String = jsonObj match {
-    case Nil => ""
-    case _ => jsonObj(0).asOpt[String].get
-  }
-  
-  
-  
-  
-  
-  
   
 }
