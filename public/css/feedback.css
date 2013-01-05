@@ -758,8 +758,15 @@ button.feedback-btn.small, input[type="submit"].feedback-btn.small {
 
 }
 
-.feedback-takeapicture {
+.feedback-webcambtn {
 	position: absolute;
 	left: 0;
 	margin-left: 80px;
+}
+
+.feedback-takeapicture {
+	position: absolute;
+	left: 50%;
+	margin-left: 80px;
+	visibility: hidden;
 }

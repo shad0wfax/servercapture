@@ -98,6 +98,8 @@ window.snapPhoto = function( options ) {
     options.feedbackLabel =  options.feedbackLabel || "Additional comments (optional)";
     options.takeAPictureMsg =  options.takeAPictureMsg || "Clicking on the button will start your webcam and prompt you to grant it permission. You can cancel anytime.";
     options.takeAPictureLabel =  options.takeAPictureLabel || "Click";
+    options.webcamOnLabel =  options.webcamOnLabel || "Turn on Webcam";
+    options.webcamOffLabel =  options.webcamOffLabel || "Turn off Webcam";
     
     if (options.pages === undefined ) {
         options.pages = [
@@ -155,6 +157,7 @@ window.snapPhoto = function( options ) {
             	// Remove the header/footer stuff added
             	modalHeader.removeChild(document.getElementById('vrendezvous-webcammsg'));
             	modalFooter.removeChild(document.getElementById('vrendezvous-clickbtn'));
+            	modalFooter.removeChild(document.getElementById('vrendezvous-camerabtn'));
             	
             	// Just send
             	 returnMethods.send( options.adapter );
@@ -175,7 +178,7 @@ window.snapPhoto = function( options ) {
 
             // akshay added: 
             // Call start of page 0 (modified to photo capture page directly now)
-            options.pages[ 0 ].start( modal, modalHeader, modalFooter, nextButton );
+            options.pages[ 0 ].start( modal, modalHeader, modalFooter, nextButton);
         },
 
 
@@ -311,13 +314,18 @@ window.snapPhoto.Photo.prototype.close = function(){
 
 };
 
-window.snapPhoto.Photo.prototype.start = function( modal, modalHeader, modalFooter, nextButton ) {
+window.snapPhoto.Photo.prototype.start = function( modal, modalHeader, modalFooter, nextButton) {
         emptyElements( this.dom );
         nextButton.disabled = false;
         
         var $this = this;
 
         var action = true;
+        var webcamOn = false;
+        var webcamOffLabel = this.options.webcamOffLabel;
+        var webcamOnLabel = this.options.webcamOnLabel;
+        var localstream, startbutton, webcambutton;
+        var nextBtnFn = nextButton.onclick;
         
         // Akshay test
         cancelbuttonClickFunction = function( e ) {
@@ -326,16 +334,41 @@ window.snapPhoto.Photo.prototype.start = function( modal, modalHeader, modalFoot
             // TODO: MAKE THIS WORK!
         },
 
-        photobuttonClickFunction = function( e ) {
+        webcamButtonClickFunction = function(e) {
             e.preventDefault();
+            
+            if (webcamOn == true) {
+            	try {
+            		localstream.stop();
+            		webcambutton.firstChild.nodeValue = webcamOnLabel;
+            		webcamOn = false;
+            		startbutton.style.visibility = "hidden";
+            	} catch (e) {
+            		console.log("An error occured! " + e);
+				}
+            	return;
+            }
+            webcamOn = true;
+            nextButton.onclick = function() {
+            	try {
+            		localstream.stop();
+            	} catch (e) {
+            		console.log("An error occured! " + e);
+				}
+            	nextBtnFn.apply();
+            }
             
 	      	  var streaming = false,
 		      video        = document.getElementById('vrendezvous-video'),
 		      canvas       = document.getElementById('vrendezvous-canvas'),
 		      photo        = document.getElementById('vrendezvous-photo'),
-		      startbutton  = this,
 		      width = 480,
 		      height = 0;
+	      	  startbutton  = document.getElementById('vrendezvous-camerabtn');
+	      	  webcambutton = this;
+	      	  
+	      	webcambutton.firstChild.nodeValue = webcamOffLabel;
+	      	startbutton.style.visibility = "visible";
 	
 		  navigator.getMedia = ( navigator.getUserMedia || 
 		                         navigator.webkitGetUserMedia ||
@@ -348,6 +381,7 @@ window.snapPhoto.Photo.prototype.start = function( modal, modalHeader, modalFoot
 		      audio: false 
 		    },
 		    function(stream) {
+		      localstream = stream;
 		      if (navigator.mozGetUserMedia) { 
 		        video.mozSrcObject = stream;
 		      } else {
@@ -408,10 +442,6 @@ window.snapPhoto.Photo.prototype.start = function( modal, modalHeader, modalFoot
         photoContainer.appendChild(canvasElem);
         photoContainer.appendChild(photoElem);
         
-        //var buttonItem = [ photoButton, cancelButton ];
-        var photoButton = element("a", this.options.takeAPictureLabel);
-//        	cancelButton = element("a", "Cancel");
-
         var picDiv = document.createElement("div");
 //        pivDiv.appendChild( element("span
         
@@ -420,13 +450,21 @@ window.snapPhoto.Photo.prototype.start = function( modal, modalHeader, modalFoot
         modalHeader.appendChild(webcamMsg);
 
         // add highlight and blackout buttons
-        photoButton.className = 'btn btn-primary btn-small feedback-takeapicture';
-        photoButton.href = "#";
-        photoButton.id = "vrendezvous-clickbtn";
-        photoButton.onclick = photobuttonClickFunction;
-        modalFooter.appendChild( photoButton );
+        var webcamButton = element("a", this.options.webcamOnLabel);
+        webcamButton.className = 'btn btn-primary btn-small feedback-webcambtn';
+        webcamButton.href = "#";
+        webcamButton.id = "vrendezvous-clickbtn";
+        webcamButton.onclick = webcamButtonClickFunction;
+        modalFooter.appendChild( webcamButton );
         modalFooter.appendChild( document.createTextNode(" ") );
 
+        var photoButton = element("a", this.options.takeAPictureLabel);
+        photoButton.className = 'btn btn-primary btn-small feedback-takeapicture';
+        photoButton.href = "#";
+        photoButton.id = "vrendezvous-camerabtn";
+        modalFooter.appendChild( photoButton );
+        modalFooter.appendChild( document.createTextNode(" ") );
+        
         var emailContainer = document.createElement('div');
         emailContainer.id = "email-container";
         emailContainer.className = "email-comment-for-photo";
