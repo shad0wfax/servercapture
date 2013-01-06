@@ -9,6 +9,7 @@ import play.Logger
 import play.api.libs.json.JsValue
 import play.api.libs.json.Json
 import java.util.Date
+import models.email.Emailer
 
 /**
  * @author Akshay Sharma
@@ -30,8 +31,11 @@ class Capture extends Actor {
 	  Logger.debug(image + "\n\n")
 		
 	  val imageData: String = image.substring("data:image/png;base64,".length())
-	  val capture = ImageCapture.createFromBase64(ImageCapture(NotAssigned, email, comment, ""), imageData)
+	  val capture = ImageCapture.createFromBase64(ImageCapture(NotAssigned, email, comment, "", "png"), imageData)
 	
+	  // Send email if provided
+	  Emailer.email(capture)
+	  
 	  // Testing:
 	  println(ImageCapture.all())
     }

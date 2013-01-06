@@ -12,8 +12,9 @@ object ApplicationBuild extends Build {
     jdbc,
     anorm,
     "commons-codec" % "commons-codec" % "1.7",
-    "commons-io" % "commons-io" % "2.4"
-    
+    "commons-io" % "commons-io" % "2.4",
+    //"org.apache.httpcomponents" % "httpclient" % "4.2.1"
+    "org.scalaj" %% "scalaj-http" % "0.3.6"
   )
 
 

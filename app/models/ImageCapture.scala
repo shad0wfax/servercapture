@@ -21,18 +21,23 @@ import java.util.UUID
  * @author Akshay Sharma
  * Dec 25, 2012
  */
-case class ImageCapture(id: Pk[Long], email: String, comment: String, imageId: String)
+case class ImageCapture(val id: Pk[Long], val email: String, val comment: String, val imageId: String,  val extension: String) {
+	val url: String = ImageCapture.imageDir + imageId + "." + extension
+}
 
 object ImageCapture {
-    /**
+	val imageDir = Play.current.configuration.getString("image.store.dir").get
+
+	/**
    * Parse a User from a ResultSet
    */
   val simple = {
     get[Pk[Long]]("image_capture.id") ~
     get[String]("image_capture.email") ~
     get[String]("image_capture.comment") ~
-    get[String]("image_capture.image_id") map {
-      case id~email~comment~imageId => ImageCapture(id, email, comment, imageId)
+    get[String]("image_capture.image_id") ~
+    get[String]("image_capture.extension") map {
+      case id~email~comment~imageId~extension => ImageCapture(id, email, comment, imageId, extension)
     }
   }
 
@@ -44,13 +49,14 @@ object ImageCapture {
       SQL(
         """
           insert into image_capture(image_id, email, comment) values (
-            {image_id}, {email}, {comment}
+            {image_id}, {email}, {comment}, {extension}
           )
         """
       ).on(
         'email -> captureWithImageId.email,
         'comment -> captureWithImageId.comment,
-        'image_id -> captureWithImageId.imageId
+        'image_id -> captureWithImageId.imageId,
+        'extension -> captureWithImageId.extension
       ).executeUpdate()
     }
     
@@ -60,9 +66,8 @@ object ImageCapture {
   
   private def createImageOnFile(capture: ImageCapture, base64Image: String): ImageCapture = {
 	val base64: Base64 = new Base64
-	val imageDir = Play.current.configuration.getString("image.store.dir").get
 	val fileName = UUID.randomUUID().toString()
-	val file = new FileOutputStream(new File(imageDir + fileName + ".png"));
+	val file = new FileOutputStream(new File(imageDir + fileName + "." + capture.extension));
 	val decoded = base64 decode(base64Image)
 	
 	//println("decoded image data = \n\n" + decoded)
