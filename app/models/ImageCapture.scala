@@ -22,7 +22,7 @@ import java.util.UUID
  * Dec 25, 2012
  */
 case class ImageCapture(val id: Pk[Long], val email: String, val comment: String, val imageId: String,  val extension: String) {
-	val url: String = ImageCapture.imageDir + imageId + "." + extension
+	def url: String = ImageCapture.imageDir + imageId + "." + extension
 }
 
 object ImageCapture {
@@ -48,7 +48,7 @@ object ImageCapture {
     DB.withConnection { implicit connection =>
       SQL(
         """
-          insert into image_capture(image_id, email, comment) values (
+          insert into image_capture(image_id, email, comment, extension) values (
             {image_id}, {email}, {comment}, {extension}
           )
         """
@@ -61,7 +61,7 @@ object ImageCapture {
     }
     
     // TODO: Copy over the auto generated id fieled (might need a select)
-    capture
+    captureWithImageId
   }
   
   private def createImageOnFile(capture: ImageCapture, base64Image: String): ImageCapture = {
