@@ -82,10 +82,10 @@ window.Feedback = function( options ) {
     options = options || {};
 
     // default properties
-    options.label = options.label || "Send Feedback";
+    options.label = options.label || "Feedback";
     options.header = options.header || "Send Feedback";
-    // options.url = options.url || "http://127.0.0.1.xip.io:9000/capture";
-    options.url = options.url || "/capture";
+    // options.url = options.url || "http://127.0.0.1.xip.io:9000/capimg";
+    options.url = options.url || "/capimg";
     options.adapter = options.adapter || new window.Feedback.XHR( options.url );
     
     options.nextLabel = options.nextLabel || "Continue";
@@ -256,6 +256,10 @@ window.Feedback = function( options ) {
                     data[ p++ ] = tmp;
                 }
             }
+            // Add a reference element to indicate which capture:
+            var ref = {}
+            ref["ref"] = "web#page"
+            data[data.length] = ref;
 
             nextButton.disabled = true;
                 
@@ -293,7 +297,7 @@ window.Feedback = function( options ) {
     options = options || {};
 
     button = element( "button", options.label );
-    button.className = "feedback-btn feedback-bottom-right";
+    button.className = "btn btn-success btn-small feedback-bottom-right";
 
     button.setAttribute(H2C_IGNORE, true);
 

@@ -3,17 +3,16 @@
  */
 package models.email
 
-import scala.collection.immutable.Map
+import java.io.File
+import java.io.FileInputStream
+
+import org.apache.commons.io.IOUtils
+
 import models.ImageCapture
+import models.Speech2TextCapture
 import play.Logger
-import play.api.libs.concurrent.Execution.Implicits.defaultContext
-import play.api.libs.ws.Response
-import play.api.libs.ws.WS
 import scalaj.http.Http
 import scalaj.http.MultiPart
-import java.io.File
-import org.apache.commons.io.IOUtils
-import java.io.FileInputStream
 
 
 /**
@@ -21,43 +20,53 @@ import java.io.FileInputStream
  * Jan 5, 2013
  */
 object Emailer {
+  private val key = "key-0qiaqkgo4ts6zczzwdt808e4-rk-31w3"
+  private val url = "https://api.mailgun.net/v2/rendezvouswith.us.mailgun.org/messages"
 	
-  def email(imageCapture: ImageCapture) = {
-    imageCapture.email match {
-      case null => Logger.debug("Was passed null as email")
-      case "" => Logger.debug("Was passed null as email")
-      case _ => call(imageCapture)     
-    } 
-    
+//  def email(capture: Capture) = capture match {
+//    case ImageCapture(imageCapture) => email(imageCapture)
+//    
+//  } 
+//  
+  def send(emailable: Emailable) = emailable.email match {
+    case null => Logger.debug("Was passed null as email")
+    case "" => Logger.debug("Was passed null as email")
+    case _ => process(emailable)     
   }
   
-  private def call(capture: ImageCapture) = {
-//	WS
-//	  .url("https://api.mailgun.net/v2/rendezvouswith.us.mailgun.org/messages")
-//	  .withAuth("api", "key-0qiaqkgo4ts6zczzwdt808e4-rk-31w3", com.ning.http.client.Realm.AuthScheme.BASIC)
-//	  .post(prepare(capture))
-//	  .map(response => handle(response));
-    
-    
-    val file = new FileInputStream(new File(capture.url))
-    
-    //case class MultiPart(val name: String, val filename: String, val mime: String, val data: Array[Byte])
+  private def process(emailable: Emailable) = emailable match {
+    case ic: ImageCapture => emailImageCapture(ic)
+    case s2tc: Speech2TextCapture => emailS2TCapture(s2tc)
+    case _ => Logger.debug("Unknown Capture type passed: " + emailable + " Will not email");
+  }
 
+  private def emailImageCapture(capture: ImageCapture) = {
+    val file = new FileInputStream(new File(capture.url))
     val response = Http
-      .multipart("https://api.mailgun.net/v2/rendezvouswith.us.mailgun.org/messages", 
-          MultiPart("attachment", "attachment.png", "image/png", IOUtils.toByteArray(file)))
-      .auth("api", "key-0qiaqkgo4ts6zczzwdt808e4-rk-31w3")
-      .params(
-         "from" -> "Visual Rendezvous <postmaster@rendezvouswith.us.mailgun.org>",
-         "to" -> capture.email,
-         "subject" -> "Regarding your issue/feedback",
-         "text" -> ("We received your inputs and we will be following up with you shortly. Here is a reference of what you sent us: " + capture.comment)
-         //"html" -> ("<html><p>Visual data</p> <img src=\"cid:attachment.png\"></html>") 
-      )
+      .multipart(url, MultiPart("attachment", "attachment.png", "image/png", IOUtils.toByteArray(file)))
+      .auth("api", key)
+      .params(sendParams(capture))
       .asString
       handle(response)
   }
   
+  private def emailS2TCapture(capture: Speech2TextCapture) = {
+    val response = Http
+      .post(url)
+      .auth("api", key)
+      .params(sendParams(capture, "Speech to text data sent: \n" + capture.speech2Text))
+      .asString
+      handle(response)
+  }
+  
+  private def sendParams(capture: models.Capture, additionalText: String = ""): List[(String, String)] = {
+    List("from" -> "Visual Rendezvous <postmaster@rendezvouswith.us.mailgun.org>",
+     "to" -> capture.email,
+     "subject" -> "Regarding your issue/feedback",
+     "text" -> ("We received your inputs and we will be following up with you shortly.\nHere is a reference of what you sent us:\nComments: " 
+         + capture.comment + "\n" + additionalText))
+  }
+
   private def handle(response: String) = {
     Logger.debug("Back from email service:- " + response)
     // TODO:

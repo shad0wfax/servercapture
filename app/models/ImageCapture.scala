@@ -21,26 +21,27 @@ import java.util.UUID
  * @author Akshay Sharma
  * Dec 25, 2012
  */
-case class ImageCapture(val id: Pk[Long], val email: String, val comment: String, val imageId: String,  val extension: String) {
+case class ImageCapture(val id: Pk[Long], val email: String, val comment: String, val imageId: String,  
+    val extension: String, val ref: String) extends Capture {
 	def url: String = ImageCapture.imageDir + imageId + "." + extension
 }
 
 object ImageCapture {
-	val imageDir = Play.current.configuration.getString("image.store.dir").get
+  private val imageDir = Play.current.configuration.getString("image.store.dir").get
 
-	/**
-   * Parse a User from a ResultSet
+ /**
+   * Parse a ImageCapture from a ResultSet
    */
   val simple = {
     get[Pk[Long]]("image_capture.id") ~
     get[String]("image_capture.email") ~
     get[String]("image_capture.comment") ~
     get[String]("image_capture.image_id") ~
-    get[String]("image_capture.extension") map {
-      case id~email~comment~imageId~extension => ImageCapture(id, email, comment, imageId, extension)
+    get[String]("image_capture.extension") ~
+    get[String]("image_capture.ref") map {
+      case id~email~comment~imageId~extension~ref => ImageCapture(id, email, comment, imageId, extension, ref)
     }
   }
-
   
   def createFromBase64(capture: ImageCapture, base64Image: String): ImageCapture = {
     val captureWithImageId = createImageOnFile(capture, base64Image)
@@ -48,15 +49,16 @@ object ImageCapture {
     DB.withConnection { implicit connection =>
       SQL(
         """
-          insert into image_capture(image_id, email, comment, extension) values (
-            {image_id}, {email}, {comment}, {extension}
+          insert into image_capture(image_id, email, comment, extension, ref) values (
+            {image_id}, {email}, {comment}, {extension}, {ref}
           )
         """
       ).on(
         'email -> captureWithImageId.email,
         'comment -> captureWithImageId.comment,
         'image_id -> captureWithImageId.imageId,
-        'extension -> captureWithImageId.extension
+        'extension -> captureWithImageId.extension,
+        'ref -> captureWithImageId.ref
       ).executeUpdate()
     }
     

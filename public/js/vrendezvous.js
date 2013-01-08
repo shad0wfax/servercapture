@@ -6,18 +6,18 @@ window.vrendezvous = function( options ) {
 	// document.getElementsByTagName('head')[0].appendChild(imported);
 	
 	// Load the css file first
-	var url = 'css/feedback.css'
+	var url1 = 'css/feedback.css';
+//	var url2 = 'css/uidarkness/jquery-ui-1.9.2.custom.min.css'
+		
+	
+	
 	if(document.createStyleSheet) {
-	    try { document.createStyleSheet(url); } catch (e) { }
+	    try { document.createStyleSheet(url1); } catch (e) { }
+//	    try { document.createStyleSheet(url2); } catch (e) { }
 	}
 	else {
-	    var css;
-	    css         = document.createElement('link');
-	    css.rel     = 'stylesheet';
-	    css.type    = 'text/css';
-	    css.media   = "all";
-	    css.href    = url;
-	    document.getElementsByTagName("head")[0].appendChild(css);
+		createStylesheet(url1);
+//		createStylesheet(url2);
 	}
 	
 	// Load the feedback.js
@@ -26,11 +26,39 @@ window.vrendezvous = function( options ) {
 		Feedback({h2cPath:'js/html2canvas.js'});
 	});
 	
-	// Load the feedback.js
+	// Load the photo.js
 	$.getScript('js/photo.js', function() {
 		// safe way to load another script. A good place to add dependent code
-		snapPhoto({h2cPath:'js/html2canvas.js'});
+		snapPhoto({});
 	});
+	
+	// Load the speech2text.js.js
+	$.getScript('js/speech2text.js', function() {
+		// safe way to load another script. A good place to add dependent code
+		speech2Text({});
+	});
+	
+	// Load the uidarkness experiment
+//	$.getScript('js/uidarkness/jquery-ui-1.9.2.with_minmax_dialog.js', function() {
+//		// safe way to load another script. A good place to add dependent code
+//		$("#vrendezvous-dialog").dialog({
+//			autoOpen: true,
+//			minimize: true, 
+//			maximize: false, 
+//			close: false,
+//			height: 140
+//		});
+//	});
+//	
+	function createStylesheet(url) {
+	    var css;
+	    css         = document.createElement('link');
+	    css.rel     = 'stylesheet';
+	    css.type    = 'text/css';
+	    css.media   = "all";
+	    css.href    = url;
+	    document.getElementsByTagName("head")[0].appendChild(css);
+	}
 	
 }
 

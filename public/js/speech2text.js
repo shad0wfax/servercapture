@@ -6,7 +6,7 @@
  Released under MIT License
 */
 (function( window, document, undefined ) {
-if ( window.snapPhoto !== undefined ) { 
+if ( window.speech2Text !== undefined ) { 
     return; 
 }
 
@@ -76,17 +76,15 @@ nextButton,
 currentPage,
 modalBody = document.createElement("div");
 
-window.snapPhoto = function( options ) {
+window.speech2Text = function( options ) {
     options = options || {};
 
     // default properties
-    options.label = options.label || "Photo";
-    options.header = options.header || "Click a Photo";
-    options.url = options.url || "/capimg";
-    options.adapter = options.adapter || new window.snapPhoto.XHR( options.url );
+    options.label = options.label || "Speech2Text";
+    options.header = options.header || "Speak to translate (uses Google Speech API)";
+    options.url = options.url || "/s2t";
+    options.adapter = options.adapter || new window.speech2Text.XHR( options.url );
     
-    options.nextLabel = options.nextLabel || "Continue";
-    options.reviewLabel = options.reviewLabel || "Review";
     options.sendLabel = options.sendLabel || "Send";
     options.closeLabel = options.closeLabel || "Close";
     
@@ -95,14 +93,16 @@ window.snapPhoto = function( options ) {
     
     options.emailLabel =  options.emailLabel || "Email adress (optional)";
     options.feedbackLabel =  options.feedbackLabel || "Additional comments (optional)";
-    options.takeAPictureMsg =  options.takeAPictureMsg || "Clicking on the button will start your webcam and prompt you to grant it permission. You can cancel anytime.";
+    options.speakMsg1 =  options.speakMsg1 || "<1>Click on Start to enable microphone. You will see a microphone button once started. For best results use a headset.";
+    options.speakMsg2 =  options.speakMsg2 || "<2>Click on the microphone button to start speaking. Click on Stop to terminate recording anytime.";
     options.takeAPictureLabel =  options.takeAPictureLabel || "Click";
-    options.webcamOnLabel =  options.webcamOnLabel || "Turn on Webcam";
-    options.webcamOffLabel =  options.webcamOffLabel || "Turn off Webcam";
+    options.speakOnLabel =  options.speakOnLabel || "Start";
+    options.speakOffLabel =  options.speakOffLabel || "Stop";
+    options.speakPlaceholder =  options.speakPlaceholder || "The speech converted to text will be placed here. You can edit it before sending the text.";
     
     if (options.pages === undefined ) {
         options.pages = [
-			new window.snapPhoto.Photo( options )
+			new window.speech2Text.Photo( options )
         ];
     }
 
@@ -130,7 +130,7 @@ window.snapPhoto = function( options ) {
             document.body.appendChild( glass );
 
             // modal close button
-            a.className =  "photo-feedback-close";
+            a.className =  "feedback-close";
             a.onclick = returnMethods.close;
             a.href = "#";
 
@@ -139,7 +139,7 @@ window.snapPhoto = function( options ) {
             // build header element
             modalHeader.appendChild( a );
             modalHeader.appendChild( element("h3", options.header ) );
-            modalHeader.className =  "photo-feedback-header";
+            modalHeader.className =  "feedback-header";
 
             modalBody.className = "feedback-body";
 
@@ -154,19 +154,19 @@ window.snapPhoto = function( options ) {
             nextButton.className =  "feedback-btn";
             nextButton.onclick = function() {
             	// Remove the header/footer stuff added
-            	modalHeader.removeChild(document.getElementById('vrendezvous-webcammsg'));
+            	modalHeader.removeChild(document.getElementById('vrendezvous-speechmsg1'));
+            	modalHeader.removeChild(document.getElementById('vrendezvous-speechmsg2'));
             	modalFooter.removeChild(document.getElementById('vrendezvous-clickbtn'));
-            	modalFooter.removeChild(document.getElementById('vrendezvous-camerabtn'));
             	
             	// Just send
             	 returnMethods.send( options.adapter );
             };
 
-            modalFooter.className = "photo-feedback-footer";
+            modalFooter.className = "feedback-footer";
             modalFooter.appendChild( nextButton );
 
 
-            modal.className =  "photo-feedback-modal";
+            modal.className =  "feedback-modal";
 
 
             modal.appendChild( modalHeader );
@@ -205,7 +205,7 @@ window.snapPhoto = function( options ) {
         // send data
         send: function( adapter ) {
             // make sure send adapter is of right prototype
-            if ( !(adapter instanceof window.snapPhoto.Send) ) {
+            if ( !(adapter instanceof window.speech2Text.Send) ) {
                 throw new Error( "Adapter is not an instance of Feedback.Send" );
             }
             
@@ -217,7 +217,7 @@ window.snapPhoto = function( options ) {
             }
             // Add a reference element to indicate which capture:
             var ref = {}
-            ref["ref"] = "web#photo"
+            ref["ref"] = "web#speech2text"
             data[data.length] = ref;
 
             nextButton.disabled = true;
@@ -255,7 +255,7 @@ window.snapPhoto = function( options ) {
     options = options || {};
 
     button = element( "button", options.label );
-    button.className = "btn btn-primary btn-small feedback-bottom-right2";
+    button.className = "btn btn-info btn-small feedback-bottom-right3";
 
     button.onclick = returnMethods.open;
     
@@ -265,8 +265,8 @@ window.snapPhoto = function( options ) {
     
     return returnMethods;
 };
-window.snapPhoto.Page = function() {};
-window.snapPhoto.Page.prototype = {
+window.speech2Text.Page = function() {};
+window.speech2Text.Page.prototype = {
 
     render: function( dom ) {
         this.dom = dom;
@@ -283,14 +283,14 @@ window.snapPhoto.Page.prototype = {
     end: function() { return true; }
 
 };
-window.snapPhoto.Send = function() {};
-window.snapPhoto.Send.prototype = {
+window.speech2Text.Send = function() {};
+window.speech2Text.Send.prototype = {
 
     send: function() {}
 
 };
 
-window.snapPhoto.Photo = function( options ) {
+window.speech2Text.Photo = function( options ) {
     this.options = options || {};
 
     //this.options.blackoutClass = this.options.blackoutClass || 'feedback-blackedout';
@@ -298,9 +298,9 @@ window.snapPhoto.Photo = function( options ) {
 
 };
 
-window.snapPhoto.Photo.prototype = new window.snapPhoto.Page();
+window.speech2Text.Photo.prototype = new window.speech2Text.Page();
 
-window.snapPhoto.Photo.prototype.end = function( modal ){
+window.speech2Text.Photo.prototype.end = function( modal ){
     modal.className = modal.className.replace(/feedback\-animate\-toside/, "");
 
     // remove event listeners
@@ -308,7 +308,7 @@ window.snapPhoto.Photo.prototype.end = function( modal ){
     document.body.removeEventListener("click", this.mouseClickEvent, false);
 };
 
-window.snapPhoto.Photo.prototype.close = function(){
+window.speech2Text.Photo.prototype.close = function(){
 //    removeElements( [ this.blackoutBox, this.highlightContainer, this.highlightBox, this.highlightClose ] );
 	removeElements( [this.highlightContainer, this.highlightClose ] );
 
@@ -317,157 +317,81 @@ window.snapPhoto.Photo.prototype.close = function(){
 
 };
 
-window.snapPhoto.Photo.prototype.start = function( modal, modalHeader, modalFooter, nextButton) {
+window.speech2Text.Photo.prototype.start = function( modal, modalHeader, modalFooter, nextButton) {
         emptyElements( this.dom );
         nextButton.disabled = false;
         
         var $this = this;
 
         var action = true;
-        var webcamOn = false;
-        var webcamOffLabel = this.options.webcamOffLabel;
-        var webcamOnLabel = this.options.webcamOnLabel;
-        var localstream, startbutton, webcambutton;
-        var nextBtnFn = nextButton.onclick;
+        var speakOn = false;
+        var speakOnLabel = this.options.speakOnLabel;
+        var	speakOffLabel = this.options.speakOffLabel;
         
-        // Akshay test
-        cancelbuttonClickFunction = function( e ) {
+        startButtonClickFunction = function(e) {
             e.preventDefault();
-            $this.close.apply();
-            // TODO: MAKE THIS WORK!
-        },
-
-        webcamButtonClickFunction = function(e) {
-            e.preventDefault();
+            var mic = document.getElementById("vrendezvous-mic");
             
-            if (webcamOn == true) {
-            	try {
-            		localstream.stop();
-            		webcambutton.firstChild.nodeValue = webcamOnLabel;
-            		webcamOn = false;
-            		startbutton.style.visibility = "hidden";
-            	} catch (e) {
-            		console.log("An error occured! " + e);
-				}
+            if (speakOn == true) {
+            	mic.style.visibility = "hidden";
+            	mic.style.display = "none";
+            	speakOn = false;
+            	speakOnButton.firstChild.nodeValue = speakOnLabel;
             	return;
             }
-            webcamOn = true;
-            nextButton.onclick = function() {
-            	try {
-            		localstream.stop();
-            	} catch (e) {
-            		console.log("An error occured! " + e);
-				}
-            	nextBtnFn.apply();
-            }
-            
-	      	  var streaming = false,
-		      video        = document.getElementById('vrendezvous-video'),
-		      canvas       = document.getElementById('vrendezvous-canvas'),
-		      photo        = document.getElementById('vrendezvous-photo'),
-		      width = 480,
-		      height = 0;
-	      	  startbutton  = document.getElementById('vrendezvous-camerabtn');
-	      	  webcambutton = this;
-	      	  
-	      	webcambutton.firstChild.nodeValue = webcamOffLabel;
-	      	startbutton.style.visibility = "visible";
-	
-		  navigator.getMedia = ( navigator.getUserMedia || 
-		                         navigator.webkitGetUserMedia ||
-		                         navigator.mozGetUserMedia ||
-		                         navigator.msGetUserMedia);
-	
-		  navigator.getMedia(
-		    { 
-		      video: true, 
-		      audio: false 
-		    },
-		    function(stream) {
-		      localstream = stream;
-		      if (navigator.mozGetUserMedia) { 
-		        video.mozSrcObject = stream;
-		      } else {
-		        var vendorURL = window.URL || window.webkitURL;
-		        video.src = vendorURL ? vendorURL.createObjectURL(stream) : stream;
-		      }
-		      video.play();
-		    },
-		    function(err) {
-		      console.log("An error occured! " + err);
-		    }
-		  );
-	
-		  video.addEventListener('canplay', function(ev){
-		    if (!streaming) {
-		      height = video.videoHeight / (video.videoWidth/width);
-		      video.setAttribute('width', width);
-		      video.setAttribute('height', height);
-		      canvas.setAttribute('width', width);
-		      canvas.setAttribute('height', height);
-		      streaming = true;
-		    }
-		  }, false);
-	
-		  function takepicture() {
-		    canvas.width = width;
-		    canvas.height = height;
-		    canvas.getContext('2d').drawImage(video, 0, 0, width, height);
-		    var data = canvas.toDataURL('image/png');
-		    photo.setAttribute('src', data);
-		  }
-	
-		  startbutton.addEventListener('click', function(ev){
-		      takepicture();
-		    ev.preventDefault();
-		  }, false);
-
+            speakOn = true;
+            mic.style.visibility = "visible";
+            mic.style.display = "block";
+            speakOnButton.firstChild.nodeValue = speakOffLabel;
         };
+        
+        speech2textTranscibe = function(content) {
+        	document.getElementById("vrendezvous-speech2text").value += (content + "\n");
+        	document.getElementById("vrendezvous-mic").value = "";
+        	document.getElementById("vrendezvous-speech2text").focus();
+        }
                 
-        var photoContainer = document.createElement('div');
-        photoContainer.id = "photo-container";
-        photoContainer.className = "photo-container";
-        this.dom.appendChild( photoContainer );
+        var s2tContainer = document.createElement('div');
+        s2tContainer.id = "photo-container";
+        //s2tContainer.className = "photo-container";
+        this.dom.appendChild( s2tContainer );
 
-        var videoElem = document.createElement("video");
-        videoElem.id = "vrendezvous-video";
-        videoElem.className = "vrendezvous-video";
+        var speech2textElem = document.createElement("textarea");
+        speech2textElem.id = "vrendezvous-speech2text";
+        speech2textElem.className = "vrendezvous-feedback";
+        speech2textElem.placeholder = this.options.speakPlaceholder;
         
-        var canvasElem = document.createElement("canvas");
-        canvasElem.id = "vrendezvous-canvas"
-        canvasElem.className = "vrendezvous-canvas";
+        var mic = document.createElement("input");
+        mic.id = "vrendezvous-mic";
+        mic.size = "0";
+        mic.style.border = "0";
+        mic.style.visibility = "hidden";
+        mic.style.display = "none";
+        mic.setAttribute('onwebkitspeechchange', 'speech2textTranscibe(this.value)');
+        mic.setAttribute('x-webkit-speech', '');
+        mic.className = 'feedback-speechbox';
         
-        var photoElem = document.createElement("img");
-        photoElem.id = "vrendezvous-photo"
-        photoElem.className = "vrendezvous-img";
-        	
-        photoContainer.appendChild(videoElem);
-        photoContainer.appendChild(canvasElem);
-        photoContainer.appendChild(photoElem);
-        
-        var picDiv = document.createElement("div");
-//        pivDiv.appendChild( element("span
-        
-        var webcamMsg = element("span", this.options.takeAPictureMsg)
-        webcamMsg.id = "vrendezvous-webcammsg";
-        modalHeader.appendChild(webcamMsg);
+        s2tContainer.appendChild(speech2textElem);
+        s2tContainer.appendChild(mic);
+
+        modalHeader.appendChild(element("br"));
+        var msg = element("span", this.options.speakMsg1)
+        msg.id = "vrendezvous-speechmsg1";
+        modalHeader.appendChild(msg);
+        modalHeader.appendChild(element("br"));
+        msg = element("span", this.options.speakMsg2)
+        msg.id = "vrendezvous-speechmsg2";
+        modalHeader.appendChild(msg);
 
         // add highlight and blackout buttons
-        var webcamButton = element("a", this.options.webcamOnLabel);
-        webcamButton.className = 'btn btn-primary btn-small feedback-webcambtn';
-        webcamButton.href = "#";
-        webcamButton.id = "vrendezvous-clickbtn";
-        webcamButton.onclick = webcamButtonClickFunction;
-        modalFooter.appendChild( webcamButton );
+        var speakOnButton = element("a", this.options.speakOnLabel);
+        speakOnButton.className = 'btn btn-primary btn-small feedback-speechbtn';
+        speakOnButton.href = "#";
+        speakOnButton.id = "vrendezvous-clickbtn";
+        speakOnButton.onclick = startButtonClickFunction;
+        modalFooter.appendChild( speakOnButton );
         modalFooter.appendChild( document.createTextNode(" ") );
 
-        var photoButton = element("a", this.options.takeAPictureLabel);
-        photoButton.className = 'btn btn-primary btn-small feedback-takeapicture';
-        photoButton.href = "#";
-        photoButton.id = "vrendezvous-camerabtn";
-        modalFooter.appendChild( photoButton );
-        modalFooter.appendChild( document.createTextNode(" ") );
-        
         var emailContainer = document.createElement('div');
         emailContainer.id = "email-container";
         emailContainer.className = "email-comment-for-photo";
@@ -486,23 +410,23 @@ window.snapPhoto.Photo.prototype.start = function( modal, modalHeader, modalFoot
 
 };
 
-window.snapPhoto.Photo.prototype.render = function() {    
+window.speech2Text.Photo.prototype.render = function() {    
     this.dom = document.createElement("div");
     return this;
 };
 
-window.snapPhoto.Photo.prototype.data = function() {
+window.speech2Text.Photo.prototype.data = function() {
     if ( this._data !== undefined ) {
         return this._data;
     }
 
 	//return
 	var data = {};
-    var canvasImg = document.getElementById("vrendezvous-canvas");
+    var s2t = document.getElementById("vrendezvous-speech2text");
     var email = document.getElementById("vrendezvous-email");
     var feedback = document.getElementById("vrendezvous-feedback");
 
-    data["image"] = canvasImg.toDataURL('image/png');
+    data["speech2text"] = s2t.value.length == 0 ? "" : s2t.value;
     data["email"] = email.value.length == 0 ? "" : email.value;
     data["comments"] = feedback.value.length == 0 ? "" : feedback.value;
 
@@ -511,16 +435,16 @@ window.snapPhoto.Photo.prototype.data = function() {
 };
 
 
-window.snapPhoto.XHR = function( url ) {
+window.speech2Text.XHR = function( url ) {
     
     this.xhr = new XMLHttpRequest();
     this.url = url;
 
 };
 
-window.snapPhoto.XHR.prototype = new window.snapPhoto.Send();
+window.speech2Text.XHR.prototype = new window.speech2Text.Send();
 
-window.snapPhoto.XHR.prototype.send = function( data, callback ) {
+window.speech2Text.XHR.prototype.send = function( data, callback ) {
     
     var xhr = this.xhr;
     
