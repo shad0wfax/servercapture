@@ -1,4 +1,5 @@
 /*
+ * Based on -
  feedback.js <http://experiments.hertzen.com/jsfeedback/>
  Copyright (c) 2012 Niklas von Hertzen. All rights reserved.
  http://www.twitter.com/niklasvh
@@ -82,8 +83,8 @@ window.Feedback = function( options ) {
     options = options || {};
 
     // default properties
-    options.label = options.label || "Feedback";
-    options.header = options.header || "Send Feedback";
+    options.label = options.label || "Highlight";
+    options.header = options.header || "Visual feedback about this web page";
     // options.url = options.url || "http://127.0.0.1.xip.io:9000/capimg";
     options.url = options.url || "/capimg";
     options.adapter = options.adapter || new window.Feedback.XHR( options.url );

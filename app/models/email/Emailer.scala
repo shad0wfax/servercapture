@@ -23,11 +23,6 @@ object Emailer {
   private val key = "key-0qiaqkgo4ts6zczzwdt808e4-rk-31w3"
   private val url = "https://api.mailgun.net/v2/rendezvouswith.us.mailgun.org/messages"
 	
-//  def email(capture: Capture) = capture match {
-//    case ImageCapture(imageCapture) => email(imageCapture)
-//    
-//  } 
-//  
   def send(emailable: Emailable) = emailable.email match {
     case null => Logger.debug("Was passed null as email")
     case "" => Logger.debug("Was passed null as email")

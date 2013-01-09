@@ -6,7 +6,7 @@ window.vrendezvous = function( options ) {
 	// document.getElementsByTagName('head')[0].appendChild(imported);
 	
 	// Load the css file first
-	var url1 = 'css/feedback.css';
+	var url1 = '/assets/css/feedback.css';
 //	var url2 = 'css/uidarkness/jquery-ui-1.9.2.custom.min.css'
 		
 	
@@ -21,21 +21,27 @@ window.vrendezvous = function( options ) {
 	}
 	
 	// Load the feedback.js
-	$.getScript('js/feedback.js', function() {
+	$.getScript('/assets/js/feedback.js', function() {
 		// safe way to load another script. A good place to add dependent code
-		Feedback({h2cPath:'js/html2canvas.js'});
+		Feedback({h2cPath:'/assets/js/html2canvas.js'});
 	});
 	
 	// Load the photo.js
-	$.getScript('js/photo.js', function() {
+	$.getScript('/assets/js/photo.js', function() {
 		// safe way to load another script. A good place to add dependent code
 		snapPhoto({});
 	});
 	
 	// Load the speech2text.js.js
-	$.getScript('js/speech2text.js', function() {
+	$.getScript('/assets/js/speech2text.js', function() {
 		// safe way to load another script. A good place to add dependent code
 		speech2Text({});
+	});
+	
+	// Load the audio.js
+	$.getScript('/assets/js/audio.js', function() {
+		// safe way to load another script. A good place to add dependent code
+		audio({});
 	});
 	
 	// Load the uidarkness experiment

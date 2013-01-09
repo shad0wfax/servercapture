@@ -7,7 +7,7 @@
  Released under MIT License
 */
 (function( window, document, undefined ) {
-if ( window.speech2Text !== undefined ) { 
+if ( window.audio !== undefined ) { 
     return; 
 }
 
@@ -77,14 +77,14 @@ nextButton,
 currentPage,
 modalBody = document.createElement("div");
 
-window.speech2Text = function( options ) {
+window.audio = function( options ) {
     options = options || {};
 
     // default properties
-    options.label = options.label || "SpeechToText";
-    options.header = options.header || "Speak to translate (uses Google Speech API)";
+    options.label = options.label || "Audio";
+    options.header = options.header || "Send audio clipping";
     options.url = options.url || "/s2t";
-    options.adapter = options.adapter || new window.speech2Text.XHR( options.url );
+    options.adapter = options.adapter || new window.audio.XHR( options.url );
     
     options.sendLabel = options.sendLabel || "Send";
     options.closeLabel = options.closeLabel || "Close";
@@ -103,7 +103,7 @@ window.speech2Text = function( options ) {
     
     if (options.pages === undefined ) {
         options.pages = [
-			new window.speech2Text.Photo( options )
+			new window.audio.Photo( options )
         ];
     }
 
@@ -206,7 +206,7 @@ window.speech2Text = function( options ) {
         // send data
         send: function( adapter ) {
             // make sure send adapter is of right prototype
-            if ( !(adapter instanceof window.speech2Text.Send) ) {
+            if ( !(adapter instanceof window.audio.Send) ) {
                 throw new Error( "Adapter is not an instance of Feedback.Send" );
             }
             
@@ -256,7 +256,7 @@ window.speech2Text = function( options ) {
     options = options || {};
 
     button = element( "button", options.label );
-    button.className = "btn btn-info btn-small feedback-bottom-right3";
+    button.className = "btn btn-warning btn-small feedback-bottom-right4";
 
     button.onclick = returnMethods.open;
     
@@ -266,8 +266,8 @@ window.speech2Text = function( options ) {
     
     return returnMethods;
 };
-window.speech2Text.Page = function() {};
-window.speech2Text.Page.prototype = {
+window.audio.Page = function() {};
+window.audio.Page.prototype = {
 
     render: function( dom ) {
         this.dom = dom;
@@ -284,14 +284,14 @@ window.speech2Text.Page.prototype = {
     end: function() { return true; }
 
 };
-window.speech2Text.Send = function() {};
-window.speech2Text.Send.prototype = {
+window.audio.Send = function() {};
+window.audio.Send.prototype = {
 
     send: function() {}
 
 };
 
-window.speech2Text.Photo = function( options ) {
+window.audio.Photo = function( options ) {
     this.options = options || {};
 
     //this.options.blackoutClass = this.options.blackoutClass || 'feedback-blackedout';
@@ -299,9 +299,9 @@ window.speech2Text.Photo = function( options ) {
 
 };
 
-window.speech2Text.Photo.prototype = new window.speech2Text.Page();
+window.audio.Photo.prototype = new window.audio.Page();
 
-window.speech2Text.Photo.prototype.end = function( modal ){
+window.audio.Photo.prototype.end = function( modal ){
     modal.className = modal.className.replace(/feedback\-animate\-toside/, "");
 
     // remove event listeners
@@ -309,7 +309,7 @@ window.speech2Text.Photo.prototype.end = function( modal ){
     document.body.removeEventListener("click", this.mouseClickEvent, false);
 };
 
-window.speech2Text.Photo.prototype.close = function(){
+window.audio.Photo.prototype.close = function(){
 //    removeElements( [ this.blackoutBox, this.highlightContainer, this.highlightBox, this.highlightClose ] );
 	removeElements( [this.highlightContainer, this.highlightClose ] );
 
@@ -318,7 +318,7 @@ window.speech2Text.Photo.prototype.close = function(){
 
 };
 
-window.speech2Text.Photo.prototype.start = function( modal, modalHeader, modalFooter, nextButton) {
+window.audio.Photo.prototype.start = function( modal, modalHeader, modalFooter, nextButton) {
         emptyElements( this.dom );
         nextButton.disabled = false;
         
@@ -411,12 +411,12 @@ window.speech2Text.Photo.prototype.start = function( modal, modalHeader, modalFo
 
 };
 
-window.speech2Text.Photo.prototype.render = function() {    
+window.audio.Photo.prototype.render = function() {    
     this.dom = document.createElement("div");
     return this;
 };
 
-window.speech2Text.Photo.prototype.data = function() {
+window.audio.Photo.prototype.data = function() {
     if ( this._data !== undefined ) {
         return this._data;
     }
@@ -436,16 +436,16 @@ window.speech2Text.Photo.prototype.data = function() {
 };
 
 
-window.speech2Text.XHR = function( url ) {
+window.audio.XHR = function( url ) {
     
     this.xhr = new XMLHttpRequest();
     this.url = url;
 
 };
 
-window.speech2Text.XHR.prototype = new window.speech2Text.Send();
+window.audio.XHR.prototype = new window.audio.Send();
 
-window.speech2Text.XHR.prototype.send = function( data, callback ) {
+window.audio.XHR.prototype.send = function( data, callback ) {
     
     var xhr = this.xhr;
     

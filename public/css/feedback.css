@@ -558,13 +558,19 @@ button.feedback-btn.small, input[type="submit"].feedback-btn.small {
 .feedback-bottom-right2 {
     position:fixed;
     bottom:5px;
-    right:80px;
+    right:83px;
 }
 
 .feedback-bottom-right3 {
     position:fixed;
     bottom:5px;
-    right:136px;
+    right:144px;
+}
+
+.feedback-bottom-right4 {
+    position:fixed;
+    bottom:5px;
+    right:252px;
 }
 
 

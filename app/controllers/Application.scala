@@ -25,8 +25,9 @@ import play.libs.Akka
 object Application extends Controller {
   
   def index = Action {
+    Ok(views.html.demo("Demo - client"))
 //    Ok(views.html.index("Your new application is ready."))
-	  Redirect("/assets/index.html")
+//	  Redirect("/assets/index.html")
   }
   
   
