@@ -574,6 +574,17 @@ button.btn.btn-mini,input[type="submit"].btn.btn-mini{*padding-top:1px;*padding-
 .alert-danger h4,.alert-error h4{color:#ffffff;}
 .alert-info{background-color:#3399f3;border-color:#11adf1;color:#ffffff;}
 .alert-info h4{color:#ffffff;}
+.alert-infoDefault {
+  color: #3a87ad;
+  background-color: #d9edf7;
+  border-color: #bce8f1;
+}
+.alert-original {
+  color: #c09853;
+  background-color: #fcf8e3;
+  border-color: #fbeed5;
+}
+
 .alert-block{padding-top:14px;padding-bottom:14px;}
 .alert-block>p,.alert-block>ul{margin-bottom:0;}
 .alert-block p+p{margin-top:5px;}

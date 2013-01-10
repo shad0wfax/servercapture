@@ -4,9 +4,16 @@
 
 # Home page
 GET     /                           controllers.Application.index
-POST 	/capimg					controllers.Application.captureImage
-# GET 	/capimg					controllers.Application.captureImage
-POST 	/s2t						controllers.Application.speechToText
+#navigation
+GET     /demo                           controllers.Application.index
+GET     /dashboard                           controllers.Application.dashboard
+GET     /how                           controllers.Application.how
+GET     /about                           controllers.Application.about
+GET     /usecase                           controllers.Application.usecase
+
+# Capture stuff
+POST 	/capimg					controllers.capture.Capture.captureImage
+POST 	/s2t						controllers.capture.Capture.speechToText
 
 
 # Map static resources from the /public folder to the /assets URL path

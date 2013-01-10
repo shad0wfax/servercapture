@@ -25,46 +25,23 @@ import play.libs.Akka
 object Application extends Controller {
   
   def index = Action {
-    Ok(views.html.demo("Demo - client"))
-//    Ok(views.html.index("Your new application is ready."))
-//	  Redirect("/assets/index.html")
+    Ok(views.html.demo("Demo - VisualRendezvous"))
   }
   
-  
-  // 10 MB size limit for now
-  def captureImage = Action(parse.urlFormEncoded(maxLength = 1024 * 1024)) { request =>
-    capture(request, "image")
+  def dashboard = Action {
+    Ok(views.html.dashboard("Dashboard - VisualRendezvous"))
   }
   
-  // 10 MB size limit for now
-  def speechToText = Action(parse.urlFormEncoded(maxLength = 1024 * 1024)) { request =>
-    capture(request, "speech2Text")
+  def how = Action {
+    Ok(views.html.how("How it works - VisualRendezvous"))
   }
   
-  private def capture(request: Request[Map[String,Seq[String]]], capType: String) = {
-	val body: Map[String, Seq[String]] = request.body
-	val dataBody: Option[Seq[String]] = body.get("data") 
-
-	// Expecting data body
-	// println("Testing to see if data :: dataBody = " + dataBody)
-	
-	dataBody.map { datas =>
-	  val captureActor = Akka.system.actorOf(Props(new Record()))
-	  val capture = capType match {
-	    case "image" => new Image(datas)
-	    case "speech2Text" => new Speech2Text(datas)
-	  }
-	  
-	  // TODO: Improve Akka usage - follow webchat sample instead of scheduling mechanism (message sending)
-	  // Schedule right away
-	  Akka.system.scheduler.scheduleOnce(0 second, captureActor, capture)
-	  
-	  Ok("200")
-	}.getOrElse {
-		println("data parameter not sent in the request body")
-    	BadRequest("Expecting urlFormEncoded data request body")  
-  	}
-    
+  def about = Action {
+    Ok(views.html.about("About - VisualRendezvous"))
+  }
+  
+  def usecase = Action {
+    Ok(views.html.usecase("Usecases - VisualRendezvous"))
   }
   
 }

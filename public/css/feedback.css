@@ -743,7 +743,7 @@ button.feedback-btn.small, input[type="submit"].feedback-btn.small {
 .email-comment-for-photo {
     overflow: auto;
     width: 100%;
-    min-height: 30px;
+    min-height: 32px;
     margin: 5px auto;
 }
 
@@ -751,6 +751,10 @@ button.feedback-btn.small, input[type="submit"].feedback-btn.small {
     margin: 0 10px 0 0 !important;
     height: 20px !important;
     width: 30% !important;
+    font-size: 12px !important;
+    font-weight: normal !important;
+    line-height: 18px !important;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif !important;
 }
 
 .email-comment-for-photo textarea {
