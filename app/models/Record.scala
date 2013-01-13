@@ -18,40 +18,34 @@ import models.email.Emailer
 class Record extends Actor {
   
   def receive = {
-    case Image(jsonData) => saveImage(jsonData)
-    case Speech2Text(jsonData) => saveS2T(jsonData)
-    
+    case CaptureImage(jsonData) => saveImage(asJson(jsonData))
+    case CaptureSpeech2Text(jsonData) => saveS2T(asJson(jsonData))
+    case CaptureFlashAudio(jsonData) => saveFlashAudio(asJson(jsonData))   
   }
   
-  private def saveImage(jsonData: Seq[String]) = {
-    val jsonString: String = jsonData(0)
-    val json: JsValue = Json.parse(jsonString)
-    
+  private def saveImage(json: JsValue) = {
     //Logger.debug("Testing to see if data :: json = \n" + json)
     val email = element(json \\ "email")
     val comment = element(json \\ "comments")
-    val image = element(json \\ "image")
+    val imageB64 = element(json \\ "image")
     val ref = element(json \\ "ref")
 		
     Logger.debug("email = [" + email + "]\t comment = [" + comment + "]\t ref = [" + ref + "]\t")
     // Too big an output, so skipping for now
     //Logger.debug({image} + "\n\n")
 		
-    val imageData: String = image.substring("data:image/png;base64,".length())
-    val capture = ImageCapture.createFromBase64(ImageCapture(NotAssigned, email, comment, "", "png", ref), imageData)
+    val imageData: String = imageB64.substring("data:image/png;base64,".length())
+    val image = AssetDao.createAssetFromBase64(Image(NotAssigned, email, comment, "", "png", ref), imageData)
 	
     // Send email if provided
-    Emailer.send(capture)
+    Emailer.send(image)
     
     // Testing:
-    println(ImageCapture.all())
+    println(AssetDao.all(image))
   }
 
-  private def saveS2T(jsonData: Seq[String]) = {
-    val jsonString: String = jsonData(0)
-    val json: JsValue = Json.parse(jsonString)
-    
-    Logger.debug("Testing to see if data :: json = \n" + json)
+  private def saveS2T(json: JsValue) = {
+//    Logger.debug("Testing to see if data :: json = \n" + json)
     val email = element(json \\ "email")
     val comment = element(json \\ "comments")
     val speech2text = element(json \\ "speech2text")
@@ -60,13 +54,34 @@ class Record extends Actor {
     Logger.debug("email = [" + email + "]\t comment = [" + comment + "]\t ref = [" + ref + "]\t speech2text = ["
         + speech2text + "]\t")
         
-    val capture = Speech2TextCapture.create(Speech2TextCapture(NotAssigned, email, comment, speech2text, ref))    
+    val s2t = AssetDao.create(Speech2Text(NotAssigned, email, comment, speech2text, ref))    
 		
     // Send email if provided
-    Emailer.send(capture)
+    Emailer.send(s2t)
     
     // Testing:
-    println(Speech2TextCapture.all())
+    println(AssetDao.all(s2t))
+  }
+
+  private def saveFlashAudio(json: JsValue) = {
+//    Logger.debug("Testing to see if data :: json = \n" + json)
+    val email = element(json \\ "email")
+    val comment = element(json \\ "comments")
+    val audioBase64 = element(json \\ "audiob64")
+    val ref = element(json \\ "ref")
+		
+    Logger.debug("email = [" + email + "]\t comment = [" + comment + "]\t ref = [" + ref + "]\t")
+    // Too big an output, so skipping for now
+    //Logger.debug({image} + "\n\n")
+		
+    val audioData: String = audioBase64.substring("data:audio/wav;base64,".length())
+    val audio = AssetDao.createAssetFromBase64(Audio(NotAssigned, email, comment, "", "wav", ref), audioData)
+	
+    // Send email if provided
+    Emailer.send(audio)
+    
+    // Testing:
+    println(AssetDao.all(audio))
   }
 
   private def element(jsonObj: Seq[JsValue]): String = jsonObj match {
@@ -74,8 +89,14 @@ class Record extends Actor {
     case _ => jsonObj(0).asOpt[String].get
   }
   
+  private def asJson(jsonData: Seq[String]): play.api.libs.json.JsValue = {
+    val jsonString: String = jsonData(0)
+    Json.parse(jsonString)
+  }
+  
 }
 
 // Add more capture types for future
-case class Image(jsonData: Seq[String])
-case class Speech2Text(jsonData: Seq[String])
+case class CaptureImage(jsonData: Seq[String])
+case class CaptureSpeech2Text(jsonData: Seq[String])
+case class CaptureFlashAudio(jsonData: Seq[String])

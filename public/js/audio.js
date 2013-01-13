@@ -82,8 +82,8 @@ window.audio = function( options ) {
 
     // default properties
     options.label = options.label || "Audio";
-    options.header = options.header || "Send audio clipping";
-    options.url = options.url || "/s2t";
+    options.header = options.header || "Send audio clipping (requires flash)";
+    options.url = options.url || "/captureflaudio";
     options.adapter = options.adapter || new window.audio.XHR( options.url );
     
     options.sendLabel = options.sendLabel || "Send";
@@ -94,12 +94,12 @@ window.audio = function( options ) {
     
     options.emailLabel =  options.emailLabel || "Email adress (optional)";
     options.feedbackLabel =  options.feedbackLabel || "Additional comments (optional)";
-    options.speakMsg1 =  options.speakMsg1 || "1. Click on Start to enable microphone. You will see a microphone button once started. For best results use a headset.";
-    options.speakMsg2 =  options.speakMsg2 || "2. Click on the microphone button to start speaking. Click on Stop to terminate recording anytime.";
-    options.takeAPictureLabel =  options.takeAPictureLabel || "Click";
-    options.speakOnLabel =  options.speakOnLabel || "Start";
+    options.speakMsg1 =  options.speakMsg1 || "1. Click on Enable Mic to start the microphone. Accept the Flash security warning and close it.";
+    options.speakMsg2 =  options.speakMsg2 || "2. Click on the Record button to start your recording. Click on Stop to end the recording anytime.";
+    options.turnMicOn =  options.turnMicOn || "Enable Mic";
+    options.speakOnLabel =  options.speakOnLabel || "Record";
     options.speakOffLabel =  options.speakOffLabel || "Stop";
-    options.speakPlaceholder =  options.speakPlaceholder || "The speech converted to text will be placed here. You can edit it before sending the text.";
+    options.recordedMsgLabel =  options.recordedMsgLabel || "Your Audio has been recorded. You can now send it to the server.";
     
     if (options.pages === undefined ) {
         options.pages = [
@@ -218,7 +218,7 @@ window.audio = function( options ) {
             }
             // Add a reference element to indicate which capture:
             var ref = {}
-            ref["ref"] = "web#speech2text"
+            ref["ref"] = "web#audioflash"
             data[data.length] = ref;
 
             nextButton.disabled = true;
@@ -324,56 +324,96 @@ window.audio.Photo.prototype.start = function( modal, modalHeader, modalFooter, 
         
         var $this = this;
 
-        var action = true;
+        var micon = false;
         var speakOn = false;
         var speakOnLabel = this.options.speakOnLabel;
         var	speakOffLabel = this.options.speakOffLabel;
         
+        var anim = document.createElement('div');
+        anim.id = "vrendezvous-audio-anim";
+        anim.style.visibility = "hidden";
+        
+        var recmsg = document.createElement('div');
+        recmsg.id = "vrendezvous-rec-msg";
+        recmsg.style.visibility = "hidden";
+        
+        var audioRec = document.createElement('audio');
+        audioRec.id = "vrendezvous-audio-rec";
+        audioRec.controls = "controls";
+        var audioSrc = document.createElement('source');
+        audioSrc.src = "";
+        audioRec.appendChild(audioSrc);
+        
+        recmsg.appendChild(element("span", this.options.recordedMsgLabel))
+        recmsg.appendChild(audioRec);
+        		
         startButtonClickFunction = function(e) {
             e.preventDefault();
-            var mic = document.getElementById("vrendezvous-mic");
             
-            if (speakOn == true) {
-            	mic.style.visibility = "hidden";
-            	mic.style.display = "none";
-            	speakOn = false;
-            	speakOnButton.firstChild.nodeValue = speakOnLabel;
+            // First time - enable mic - will popup that flash warning
+            if (micon == false) {
+            	micon = true;
+            	
+            	try {
+                	Wami.setup("vrendezvous-wami");
+            	} catch( e ) {
+                    log("Error in setting up wami: " + e.message);
+                }
+
+                speakOnButton.firstChild.nodeValue = speakOnLabel;
+                document.getElementById("vrendezvous-wami").appendChild(anim).appendChild( loader() );
+                document.getElementById("vrendezvous-wami").appendChild(recmsg);
             	return;
             }
+            
+            if (speakOn == true) {
+            	speakOn = false;
+            	speakOnButton.firstChild.nodeValue = speakOnLabel;
+
+            	var base64Aud = "";
+            	try {
+            		//Wami.stopPlaying();
+            		base64Aud = Wami.stopRecordingAndGetAsBase64().replace(/(\r\n|\n|\r)/gm,"");
+            	} catch( e ) {
+                    log("Error in wami stopping. Perhaps mic wasn't allowed: " + e.message);
+                }
+        		document.getElementById("vrendezvous-audio-anim").style.visibility = "hidden";
+        		document.getElementById("vrendezvous-audio-anim").style.display = "none";
+        		document.getElementById("vrendezvous-rec-msg").style.visibility = "visible";
+        		
+        		console.log(base64Aud);
+//        		document.getElementById("vrendezvous-audio-rec").firstChild.src = base64Aud;
+                var audioSrc = document.createElement('source');
+                audioSrc.src = base64Aud;
+                document.getElementById("vrendezvous-audio-rec").appendChild(audioSrc);
+
+        		
+            	return;
+            }
+        	try {
+                Wami.startRecording("/captureflaudio");
+        	} catch( e ) {
+                log("Error in starting wami. Perhaps mic wasn't allowed: " + e.message);
+            }
             speakOn = true;
-            mic.style.visibility = "visible";
-            mic.style.display = "block";
             speakOnButton.firstChild.nodeValue = speakOffLabel;
+            document.getElementById("vrendezvous-audio-anim").style.visibility = "visible";
+            document.getElementById("vrendezvous-audio-anim").style.display = "";
+            document.getElementById("vrendezvous-rec-msg").style.visibility = "hidden";
+            document.getElementById("vrendezvous-audio-rec").removeChild(
+            		document.getElementById("vrendezvous-audio-rec").firstChild);
         };
         
-        speech2textTranscibe = function(content) {
-        	document.getElementById("vrendezvous-speech2text").value += (content + "\n");
-        	document.getElementById("vrendezvous-mic").value = "";
-        	document.getElementById("vrendezvous-speech2text").focus();
-        }
-                
         var s2tContainer = document.createElement('div');
         s2tContainer.id = "photo-container";
         //s2tContainer.className = "photo-container";
         this.dom.appendChild( s2tContainer );
 
-        var speech2textElem = document.createElement("textarea");
-        speech2textElem.id = "vrendezvous-speech2text";
-        speech2textElem.className = "vrendezvous-feedback";
-        speech2textElem.placeholder = this.options.speakPlaceholder;
+        var wamiElem = document.createElement('div');
+        wamiElem.id = "vrendezvous-wami";
+        wamiElem.className = "vrendezvous-wami";
         
-        var mic = document.createElement("input");
-        mic.id = "vrendezvous-mic";
-        mic.size = "0";
-        mic.style.border = "0";
-        mic.style.visibility = "hidden";
-        mic.style.display = "none";
-        mic.setAttribute('onwebkitspeechchange', 'speech2textTranscibe(this.value)');
-        mic.setAttribute('x-webkit-speech', '');
-        mic.className = 'feedback-speechbox';
-        
-        s2tContainer.appendChild(speech2textElem);
-        s2tContainer.appendChild(mic);
+        s2tContainer.appendChild(wamiElem);
 
         modalHeader.appendChild(element("br"));
         var msg = element("span", this.options.speakMsg1)
@@ -385,7 +425,7 @@ window.audio.Photo.prototype.start = function( modal, modalHeader, modalFooter, 
         modalHeader.appendChild(msg);
 
         // add highlight and blackout buttons
-        var speakOnButton = element("a", this.options.speakOnLabel);
+        var speakOnButton = element("a", this.options.turnMicOn);
         speakOnButton.className = 'btn btn-primary btn-small feedback-speechbtn';
         speakOnButton.href = "#";
         speakOnButton.id = "vrendezvous-clickbtn";
@@ -423,11 +463,11 @@ window.audio.Photo.prototype.data = function() {
 
 	//return
 	var data = {};
-    var s2t = document.getElementById("vrendezvous-speech2text");
+    var s2t = document.getElementById("vrendezvous-audio-rec").firstChild
     var email = document.getElementById("vrendezvous-email");
     var feedback = document.getElementById("vrendezvous-feedback");
 
-    data["speech2text"] = s2t.value.length == 0 ? "" : s2t.value;
+    data["audiob64"] = s2t.src.length == 0 ? "" : s2t.src;
     data["email"] = email.value.length == 0 ? "" : email.value;
     data["comments"] = feedback.value.length == 0 ? "" : feedback.value;
 
@@ -446,6 +486,8 @@ window.audio.XHR = function( url ) {
 window.audio.XHR.prototype = new window.audio.Send();
 
 window.audio.XHR.prototype.send = function( data, callback ) {
+	
+	alert("data = " + data)
     
     var xhr = this.xhr;
     

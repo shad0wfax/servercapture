@@ -8,8 +8,8 @@ import java.io.FileInputStream
 
 import org.apache.commons.io.IOUtils
 
-import models.ImageCapture
-import models.Speech2TextCapture
+import models.Image
+import models.Speech2Text
 import play.Logger
 import scalaj.http.Http
 import scalaj.http.MultiPart
@@ -30,12 +30,12 @@ object Emailer {
   }
   
   private def process(emailable: Emailable) = emailable match {
-    case ic: ImageCapture => emailImageCapture(ic)
-    case s2tc: Speech2TextCapture => emailS2TCapture(s2tc)
+    case ic: Image => emailImageCapture(ic)
+    case s2tc: Speech2Text => emailS2TCapture(s2tc)
     case _ => Logger.debug("Unknown Capture type passed: " + emailable + " Will not email");
   }
 
-  private def emailImageCapture(capture: ImageCapture) = {
+  private def emailImageCapture(capture: Image) = {
     val file = new FileInputStream(new File(capture.url))
     val response = Http
       .multipart(url, MultiPart("attachment", "attachment.png", "image/png", IOUtils.toByteArray(file)))
@@ -45,7 +45,7 @@ object Emailer {
       handle(response)
   }
   
-  private def emailS2TCapture(capture: Speech2TextCapture) = {
+  private def emailS2TCapture(capture: Speech2Text) = {
     val response = Http
       .post(url)
       .auth("api", key)

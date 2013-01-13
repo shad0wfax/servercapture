@@ -259,7 +259,7 @@ window.Feedback = function( options ) {
             }
             // Add a reference element to indicate which capture:
             var ref = {}
-            ref["ref"] = "web#page"
+            ref["ref"] = "web#highlight"
             data[data.length] = ref;
 
             nextButton.disabled = true;

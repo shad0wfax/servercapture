@@ -797,3 +797,9 @@ button.feedback-btn.small, input[type="submit"].feedback-btn.small {
 	margin-left: 80px;
 	visibility: hidden;
 }
+
+.vrendezvous-wami {
+    overflow: auto;
+	min-height: 200px;
+	min-width: 300px;
+}

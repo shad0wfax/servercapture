@@ -83,7 +83,7 @@ window.speech2Text = function( options ) {
     // default properties
     options.label = options.label || "SpeechToText";
     options.header = options.header || "Speak to translate (uses Google Speech API)";
-    options.url = options.url || "/s2t";
+    options.url = options.url || "/captures2t";
     options.adapter = options.adapter || new window.speech2Text.XHR( options.url );
     
     options.sendLabel = options.sendLabel || "Send";
@@ -96,7 +96,6 @@ window.speech2Text = function( options ) {
     options.feedbackLabel =  options.feedbackLabel || "Additional comments (optional)";
     options.speakMsg1 =  options.speakMsg1 || "1. Click on Start to enable microphone. You will see a microphone button once started. For best results use a headset.";
     options.speakMsg2 =  options.speakMsg2 || "2. Click on the microphone button to start speaking. Click on Stop to terminate recording anytime.";
-    options.takeAPictureLabel =  options.takeAPictureLabel || "Click";
     options.speakOnLabel =  options.speakOnLabel || "Start";
     options.speakOffLabel =  options.speakOffLabel || "Stop";
     options.speakPlaceholder =  options.speakPlaceholder || "The speech converted to text will be placed here. You can edit it before sending the text.";

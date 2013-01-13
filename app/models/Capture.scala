@@ -13,4 +13,5 @@ import models.email.Emailable
  */
 trait Capture extends Emailable {
   def comment: String
+  def ref: String
 }

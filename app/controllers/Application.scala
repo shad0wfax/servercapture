@@ -3,18 +3,11 @@
  */
 package controllers
 
-import scala.collection.immutable.Map
 import scala.concurrent.duration.DurationInt
 
-import akka.actor.Props
-import models.Image
-import models.Record
-import models.Speech2Text
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import play.api.mvc.Action
 import play.api.mvc.Controller
-import play.api.mvc.Request
-import play.libs.Akka
 
 //
 

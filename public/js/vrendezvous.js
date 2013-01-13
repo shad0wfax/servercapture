@@ -37,13 +37,24 @@ window.vrendezvous = function( options ) {
 		// safe way to load another script. A good place to add dependent code
 		speech2Text({});
 	});
-	
-	// Load the audio.js
-	$.getScript('/assets/js/audio.js', function() {
+
+	// All audio related stuff - Boy there are a few :). 
+	// TODO: Can move recorder.js inside audio.js
+	// Load the swfobject.js
+	$.getScript('https://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js', function() {
 		// safe way to load another script. A good place to add dependent code
-		audio({});
+		// Load the recorder.js
+		$.getScript('/assets/js/recorder.js', function() {
+			// safe way to load another script. A good place to add dependent code
+			// Load the audio.js
+			$.getScript('/assets/js/audio.js', function() {
+				// safe way to load another script. A good place to add dependent code
+				audio({});
+			});
+		});
 	});
 	
+
 	// Load the uidarkness experiment
 //	$.getScript('js/uidarkness/jquery-ui-1.9.2.with_minmax_dialog.js', function() {
 //		// safe way to load another script. A good place to add dependent code
