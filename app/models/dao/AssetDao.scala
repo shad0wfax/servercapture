@@ -13,6 +13,7 @@ import org.apache.commons.io.IOUtils
 import java.io.FileOutputStream
 import java.io.File
 import java.util.UUID
+import java.util.Date
 
 
 /**
@@ -24,20 +25,20 @@ object AssetDao {
 
   // Parse a ImageCapture from a ResultSet
   private val simple = {
-    get[Pk[Long]]("asset_capture.id") ~
+    get[Long]("asset_capture.id") ~
     get[String]("asset_capture.email") ~
     get[String]("asset_capture.comment") ~
     get[String]("asset_capture.content") ~
     get[String]("asset_capture.extension") ~
     get[String]("asset_capture.asset_type") ~
-    get[String]("asset_capture.ref") map {
-      case id~email~comment~content~extension~assetType~ref => 
+    get[String]("asset_capture.ref") ~
+    get[Date]("asset_capture.created") map {
+      case id~email~comment~content~extension~assetType~ref~created => 
         assetType match {
-        	case "image" => Image(id, email, comment, content, extension, ref)
-        	case "audio" => Audio(id, email, comment, content, extension, ref)
-        	case "s2t" => Speech2Text(id, email, comment, content, ref)
+        	case "image" => Image(email, comment, content, extension, ref, id, created)
+        	case "audio" => Audio(email, comment, content, extension, ref, id, created)
+        	case "s2t" => Speech2Text(email, comment, content, ref, id, created)
        	}
-        
     }
   }
 
@@ -52,37 +53,49 @@ object AssetDao {
 	
 	createAssetOnFile(asset, base64Str)
 	// Save and return
-    saveAsset(asset)
+    val insertId = saveAsset(asset)
+    
+    asset match {
+	  case ic: Image => ic.copy(id = insertId)
+	  case ac: Audio => ac.copy(id = insertId)
+	}
   }
   
   def create(s2t: Speech2Text): Speech2Text = {
-    saveAsset(s2t).asInstanceOf[Speech2Text]
+    saveAsset(s2t)
+    .asInstanceOf[Speech2Text]
   }
   
-  private def saveAsset(asset: Asset): Asset = {
+  private def saveAsset(asset: Asset): Long = {
     DB.withConnection { implicit connection =>
       SQL(
         """
-          insert into asset_capture(content, email, comment, extension, asset_type, ref) values (
-            {content}, {email}, {comment}, {extension}, {asset_type}, {ref}
+          insert into asset_capture(content, email, comment, extension, asset_type, ref, created) values (
+            {content}, {email}, {comment}, {extension}, {asset_type}, {ref}, {created}
           )
         """
       ).on(
         'email -> asset.email,
         'comment -> asset.comment,
         'content -> asset.content,
-        'extension -> asset.extension,
+        'extension -> getExtension(asset),
         'asset_type -> asset.assetType,
-        'ref -> asset.ref
-      ).executeUpdate()
+        'ref -> asset.ref,
+        'created -> asset.created
+      ).executeInsert()
+    } match {
+      case Some(long) =>  long
+      case None => throw new RuntimeException("Error occurred inserting for asset - " + asset)
     }
-    
-    // TODO: Copy over the auto generated id fieled (might need a select)
-    asset
+  }
+  
+  private def getExtension(asset: Asset):String = asset match {
+    case fa: FileAsset => fa.extension 
+    case _ => "" 
   }
   
   private def createAssetOnFile(capture: Asset, base64Str: String) = {
-    val file = CaptureResource.from(capture)(capture.content + "." + capture.extension).file
+    val file = CaptureResource.from(capture)(capture.content + "." + getExtension(capture)).file
 	val fileStream = new FileOutputStream(file);
 	
 	Logger.debug("createAssetOnFile:: file = " + file.getAbsolutePath())

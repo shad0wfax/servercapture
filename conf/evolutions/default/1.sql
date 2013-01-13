@@ -11,7 +11,8 @@ CREATE TABLE asset_capture (
     comment varchar(2000),
     extension varchar(20),
     asset_type varchar(50),
-    ref varchar(50)
+    ref varchar(50),
+    created timestamp
 );
  
 # --- !Downs

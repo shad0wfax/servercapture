@@ -4,7 +4,6 @@
 package models
 
 import akka.actor.Actor
-import anorm.NotAssigned
 import play.Logger
 import play.api.libs.json.JsValue
 import play.api.libs.json.Json
@@ -35,7 +34,7 @@ class Record extends Actor {
     //Logger.debug({image} + "\n\n")
 		
     val imageData: String = imageB64.substring("data:image/png;base64,".length())
-    val image = AssetDao.createAssetFromBase64(Image(NotAssigned, email, comment, "", "png", ref), imageData)
+    val image = AssetDao.createAssetFromBase64(Image(email, comment, "", "png", ref), imageData)
 	
     // Send email if provided
     Emailer.send(image)
@@ -54,7 +53,7 @@ class Record extends Actor {
     Logger.debug("email = [" + email + "]\t comment = [" + comment + "]\t ref = [" + ref + "]\t speech2text = ["
         + speech2text + "]\t")
         
-    val s2t = AssetDao.create(Speech2Text(NotAssigned, email, comment, speech2text, ref))    
+    val s2t = AssetDao.create(Speech2Text(email, comment, speech2text, ref))    
 		
     // Send email if provided
     Emailer.send(s2t)
@@ -75,7 +74,7 @@ class Record extends Actor {
     //Logger.debug({image} + "\n\n")
 		
     val audioData: String = audioBase64.substring("data:audio/wav;base64,".length())
-    val audio = AssetDao.createAssetFromBase64(Audio(NotAssigned, email, comment, "", "wav", ref), audioData)
+    val audio = AssetDao.createAssetFromBase64(Audio(email, comment, "", "wav", ref), audioData)
 	
     // Send email if provided
     Emailer.send(audio)

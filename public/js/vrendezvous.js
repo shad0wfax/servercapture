@@ -54,6 +54,12 @@ window.vrendezvous = function( options ) {
 		});
 	});
 	
+	// Load the speech2text.js.js
+	$.getScript('/assets/js/comingup.js', function() {
+		// safe way to load another script. A good place to add dependent code
+		comingUp({});
+	});
+
 
 	// Load the uidarkness experiment
 //	$.getScript('js/uidarkness/jquery-ui-1.9.2.with_minmax_dialog.js', function() {

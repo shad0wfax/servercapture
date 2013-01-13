@@ -573,6 +573,11 @@ button.feedback-btn.small, input[type="submit"].feedback-btn.small {
     right:252px;
 }
 
+.feedback-bottom-right5 {
+    position:fixed;
+    bottom:5px;
+    right:311px;
+}
 
 .photo-feedback-modal {
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;

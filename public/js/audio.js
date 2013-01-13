@@ -486,9 +486,6 @@ window.audio.XHR = function( url ) {
 window.audio.XHR.prototype = new window.audio.Send();
 
 window.audio.XHR.prototype.send = function( data, callback ) {
-	
-	alert("data = " + data)
-    
     var xhr = this.xhr;
     
     xhr.onreadystatechange = function() {
