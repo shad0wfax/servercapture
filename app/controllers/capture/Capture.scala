@@ -40,33 +40,6 @@ object Capture extends Controller {
   
     // 10 MB size limit for now
   def captureFlashAudio = Action(parse.urlFormEncoded(maxLength = 10 * 1024 * 1024)) { request =>
-//	val body: Map[String, Seq[String]] = request.body
-//	val dataBody: Option[Seq[String]] = body.get("data")
-//	dataBody.map { datas =>
-//		val audioB64: String = datas(0).substring(1, datas(0).length() - 1).replace("\\n", "")
-//
-//		println("audioB64 = \n\n" + audioB64)
-//		
-//		val file1 = new File(AudioResource(UUID.randomUUID().toString() + ".wav").fileUrl)
-//	    val file = new FileOutputStream(file1);
-//
-//		
-//		val decoded = new Base64 decode(audioB64)
-//		
-//		//println("decoded image data = \n\n" + decoded)
-//	
-//		// TODO: Rewrite this using the Loan pattern? https://wiki.scala-lang.org/display/SYGN/Loan
-//		try {
-//			IOUtils.write(decoded, file);
-//		} finally {
-//		  if (file != null) file.close();
-//		}
-//	}
-//	
-//
-//	// Expecting data body
-////	 println("Testing to see if data :: dataBody = " + dataBody)
-//	 Ok("200")
     capture(request, "audioFlash")
   }
   
