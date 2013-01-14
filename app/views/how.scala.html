@@ -1,16 +1,120 @@
 @(message: String)
 
 @main(title = message) {
+	<!-- Need bootstrap.js for tabs -->
+	<script src="@routes.Assets.at("js/bootstrap.min.js")"></script>
+
  	@topnav("", "", "active")	
  
- 
     <div class="container">
-      <div class="hero-unit">
-        <h2>How</h2>
-        <p>It just works...</p>
-      </div>
 
-
+  		<div class="container-fluid">
+		  <div class="row-fluid">
+		    <div class="span3">
+		      <ul id="aboutuscontent" class="nav nav-list bs-docs-sidenav affix">
+			  <li class="nav-header">How</li>
+			  <li class="divider"></li>
+			  <li class="active"><a href="#key-insight">Sign Up</a></li>
+			  <li class="divider"></li>
+			  <li><a href="#vision">Choose Funnel Elements</a></li>
+			  <li class="divider"></li>
+			  <li><a href="#our-product">Install Javascript Code</a></li>
+			  <li class="divider"></li>
+			  <li><a href="#interaction-supported">Choose Services</a></li>
+			  <li class="divider"></li>
+			  <li><a href="#who-we-are">Dashboard</a></li>
+			  <li class="divider"></li>
+			</ul>
+		      
+		    </div>
+		    <div class="span9">
+		     <div class="well well-small">
+			  <p class="lead">Technologies for Customer Support in High-resolution</p>
+		     </div>
+		        <section id="key-insight">
+		          <div class="page-header">
+		            <h4>Insights</h4>
+		          </div>
+		          <p>
+			        <ol>
+					  <li>Customer service is mostly about managing the expectations and experiences of consumers. However, most technological advancements in this domain (e.g., Salesforce ServiceCloud) have largely focused on the efficiency of customer service agents, and not consumers.</li>
+					  <li>Using rich media in customer support interactions always leads to a quicker resolution. Despite >50% Americans owning smart handhelds capable of instant rich-media interactions, most customer service activities still happen on email, web form or telephone.</li>
+					</ol>
+		          </p>
+		        </section>
+		
+		        <section id="vision">
+		          <div class="page-header">
+		            <h4>Vision</h4>
+		          </div>
+		          <p>We are re-thinking the areas of customer service and technical support in CRM systems. Our service will enable interaction between support teams of businesses and their customers in high-resolution. We are creating cloud infrastructure, smartphone apps, browser tools and services that enable rich-media communication end-to-end.</p>
+		          <p>We envision:</p>
+		          <p>
+			        <ol>
+					  <li>Square : Payments :: Visual Rendezvous : Customer engagement - Just like how Square modernized payment kiosks enabling any-size business to accept payments, we enable any-size business to offer a personalized customer engagement experience without new infrastructure.</li>
+					  <li>The customer tools we provide will become de facto means to reach out to any business. We will try to programmatically proxy the request to a business that is not registered with us.</li>
+					  <li>Providing data analytics, identifying trends on support issues, and provide automation.</li>
+					</ol>
+		        </section>
+		
+		        <section id="our-product">
+		          <div class="page-header">
+		            <h4>Product</h4>
+		          </div>
+		          <p>We are building technologies/services that enable high-resolution interaction between businesses and their customers. We provide smart device apps, browser tools and cloud services that empower users to capture, edit, store, share and search rich media in the context of customer support activities.</p>
+		          <p>Our tools and services will enable consumers and businesses to interact with each other using a device of their choice, at a time that fits their schedule and in a format that works best for the cause – and not be bound by the technical or operational limitations of the other side.</p>
+		          <p>We are driven by two visions (one on business side and another on consumer side).</p>
+		          <p>
+			        <ol>
+					  <li>Enable all businesses to offer a personalized customer engagement experience like Apple without having to invest in new manpower or compute infrastructure. This is similar to how Square modernized payments for small/medium businesses.</li>
+					  <li>Provide consumers with a single unified interface that they can use to reach out to any business. For those businesses that have not signed up with us, we will have automated ways to proxy the consumer requests.</li>
+					</ol>
+		        </section>
+		
+		        <section id="interaction-supported">
+		          <div class="page-header">
+		            <h4>Interactions</h4>
+		          </div>
+		          <dl>
+				   <dt>Asynchronous</dt>
+				   <dd>Using our mobile app or browser tools, consumers can capture short videos that describe their problem, annotate/transcode/highlight/blackout portions of this video, search for the business, and send it across to them – all from within the same app. It also takes care of product identification, response tracking, and content management on the cloud.</dd>
+  				 </dl>
+				 <dl>	
+				   <dt>Synchronous</dt>
+				   <dd>Consumers can also request for a live session with business. Users can specify their preferred times and mode of interaction (regular phone, Apple FaceTime, Google Hangout, Skype). Our apps take care of this signaling, negotiating session parameters, setting up reminders and firing up external apps on time.</dd>
+  				 </dl>
+		        </section>
+		
+		        <section id="who-we-are">
+		          <div class="page-header">
+		            <h4>We are</h4>
+		          </div>
+		          <dl>
+				   <dt>Supreeth Subramanya</dt>
+				   <dd>For the last 3 years, Supreeth has worked at Cisco Systems on building network OS components. Previously worked in multimedia and embedded systems domains for about 4 years, including at a startup.</dd>
+				   <dd><span class="label label-success">Role:</span> Programmer and Technologist - Design and build mobile and web based tools.</dd>
+  				 </dl>
+		          <dl>
+				   <dt>Akshay Sharma</dt>
+				   <dd>In the recent past co-founded a multimedia based startup called PixelSimple. Prior to that Akshay worked for more than 9 years as a consultant programmer at 3M and United Health Care building web based services, security, application platforms and clinical research product.</dd>
+				   <dd><span class="label label-success">Role:</span> Programmer and Product Strategist - Build cloud services, multimedia platform and focus on product and scalability engineering.</dd>
+  				 </dl>
+		        </section>
+		
+		    </div>
+		  </div>
+		</div>
+ 
     </div> <!-- /container -->
+ 	<script type="text/javascript">
+		 $(document).ready(function () {
+		     $('ul.nav > li').click(function (e) {
+		         //e.preventDefault();
+		         $('ul.nav > li').removeClass('active');
+		         $(this).addClass('active');                
+		     });            
+		 });
+	</script>
     
+
 }

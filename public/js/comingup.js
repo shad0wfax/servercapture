@@ -80,7 +80,7 @@ window.comingUp = function( options ) {
     options = options || {};
 
     // default properties
-    options.label = options.label || "Coming soon...";
+    options.label = options.label || "Next up...";
     options.header = options.header || "More high-res ways to engage with your customers";
     
     if (options.pages === undefined ) {
@@ -208,7 +208,7 @@ window.comingUp.Show.prototype.render = function() {
 };
 
 window.comingUp.Show.prototype.start = function( modal, modalHeader, modalFooter) {
-	this.dom.appendChild( element("p", "Our goal is to provide many ways to funnel customer interaction and engage them in rich ways." +
+	this.dom.appendChild( element("p", "Our goal is to provide many ways to funnel customer interaction and engage them in richer ways." +
 			" Here are some new things are are excited to work on:") );
     var msg = document.createElement('div');
     msg.className = "well well-small"

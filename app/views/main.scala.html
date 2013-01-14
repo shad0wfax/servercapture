@@ -1,4 +1,4 @@
-@(title: String)(content: Html)
+@(title: String, displayVRBar: Boolean = false)(content: Html)
 
 <!DOCTYPE html>
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -43,7 +43,7 @@
 	</div>
  -->    
     
-  
+  @if(displayVRBar) {
 	    <script type="text/javascript">
 	      $(document).ready(function() {
 	        //Feedback({h2cPath:'js/html2canvas.js'});
@@ -62,6 +62,6 @@
 			<!-- End of StatCounter Code for Default Guide -->
 
 	    </script>
-	    
+ }
 	</body>
 </html>

@@ -96,9 +96,10 @@ window.speech2Text = function( options ) {
     options.feedbackLabel =  options.feedbackLabel || "Additional comments (optional)";
     options.speakMsg1 =  options.speakMsg1 || "1. Click on Start to enable microphone. You will see a microphone button once started. For best results use a headset.";
     options.speakMsg2 =  options.speakMsg2 || "2. Click on the microphone button to start speaking. Click on Stop to terminate recording anytime.";
-    options.speakOnLabel =  options.speakOnLabel || "Start";
+    options.speakOnLabel =  options.speakOnLabel || "Enable Mic";
     options.speakOffLabel =  options.speakOffLabel || "Stop";
     options.speakPlaceholder =  options.speakPlaceholder || "The speech converted to text will be placed here. You can edit it before sending the text.";
+    options.micPlaceholderMsg =  options.micPlaceholderMsg || "Click on this mic button >>";
     
     if (options.pages === undefined ) {
         options.pages = [
@@ -370,6 +371,7 @@ window.speech2Text.Photo.prototype.start = function( modal, modalHeader, modalFo
         mic.setAttribute('onwebkitspeechchange', 'speech2textTranscibe(this.value)');
         mic.setAttribute('x-webkit-speech', '');
         mic.className = 'feedback-speechbox';
+        mic.placeholder = this.options.micPlaceholderMsg;
         
         s2tContainer.appendChild(speech2textElem);
         s2tContainer.appendChild(mic);
