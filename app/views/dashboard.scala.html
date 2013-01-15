@@ -9,7 +9,66 @@
  
     <div class="container">
       <div class="page-header">
-        <h2>Dashboard - All feedback in one place</h2>
+        <h2>Dashboard - Helpdesk and Administration tool</h2>
+      </div>
+
+		<div>
+			<ul class="breadcrumb">
+			  <li><a href="/dashboard">Dashboard</a> <span class="divider">/</span></li>
+			  <li><a href="#">{YourCompany}</a> <span class="divider">/</span></li>
+			  <li class="active">{demo.visualrendezvous.com}</li>
+			  <li class="active">{companies can setup Visual Rendezvous features for multiple domains}</li>
+			</ul>
+		</div>
+
+		<div class="tabbable" style="margin-bottom: 18px;">
+          <ul class="nav nav-tabs">
+            <li class="active"><a href="#tab1" data-toggle="tab">Funnels</a></li>
+            <li><a href="#tab2" data-toggle="tab">Services</a></li>
+            <li><a href="#tab3" data-toggle="tab">Highlights</a></li>
+            <li><a href="#tab4" data-toggle="tab">Photos</a></li>
+            <li><a href="#tab5" data-toggle="tab">Speech To Texts</a></li>
+            <li><a href="#tab6" data-toggle="tab">Audios</a></li>
+            <li><a href="#tab7" data-toggle="tab">Videos</a></li>
+            <li><a href="#tab8" data-toggle="tab">All</a></li>
+            <li><a href="#tab9" data-toggle="tab">Analytics</a></li>
+            <li><a href="#tab10" data-toggle="tab">Administration</a></li>
+          </ul>
+          <div class="tab-content" style="padding-bottom: 9px; border-bottom: 1px solid #ddd;">
+            <div class="tab-pane  active" id="tab1">
+              @dash.dashboardfunnel("hello")
+            </div>
+            <div class="tab-pane" id="tab2">
+              <p>List all highlights collected here.</p>
+            </div>
+            <div class="tab-pane" id="tab3">
+              <p>All photos here</p>
+            </div>
+            <div class="tab-pane" id="tab4">
+              <p>Feedback sent via speech to text</p>
+            </div>
+            <div class="tab-pane" id="tab5">
+              <p>Audio feedback</p>
+            </div>
+            <div class="tab-pane" id="tab6">
+              <p>Video feedback collected. Coming soon...</p>
+            </div>
+            <div class="tab-pane" id="tab7">
+              <p>All feedback so far.</p>
+            </div>
+            <div class="tab-pane" id="tab8">
+              <p>Account activities.</p>
+            </div>
+            <div class="tab-pane" id="tab9">
+              @dash.dashboardanalytics("hello")
+            </div>
+            <div class="tab-pane" id="tab10">
+              @dash.dashboardadmin("Hello")
+            </div>
+          </div>
+        </div>
+
+
 		<div class="alert alert-original">
  			<button type="button" class="close" data-dismiss="alert">&times;</button>
         
@@ -20,50 +79,6 @@
 			<span class="label label-inverse">For this demo, Dashboard is built on the data collected from the demo page.</span><br/> 
 			<span class="label label-inverse">The Dashboard has many placeholder items and will constantly evolve as we ship features.</span>
 		</div>
-      </div>
-
-		<div class="tabbable" style="margin-bottom: 18px;">
-          <ul class="nav nav-tabs">
-            <li class="active"><a href="#tab1" data-toggle="tab">All</a></li>
-            <li><a href="#tab2" data-toggle="tab">Highlights</a></li>
-            <li><a href="#tab3" data-toggle="tab">Photos</a></li>
-            <li><a href="#tab4" data-toggle="tab">Speech To Text</a></li>
-            <li><a href="#tab5" data-toggle="tab">Audio</a></li>
-            <li><a href="#tab6" data-toggle="tab">Video</a></li>
-            <li><a href="#tab7" data-toggle="tab">Analytics</a></li>
-            <li><a href="#tab8" data-toggle="tab">Administration</a></li>
-            <li><a href="#tab9" data-toggle="tab">Account</a></li>
-          </ul>
-          <div class="tab-content" style="padding-bottom: 9px; border-bottom: 1px solid #ddd;">
-            <div class="tab-pane  active" id="tab1">
-              <p>I'm in Section 1.</p>
-            </div>
-            <div class="tab-pane" id="tab2">
-              <p>Howdy, I'm in Section 2.</p>
-            </div>
-            <div class="tab-pane" id="tab3">
-              <p>What up girl, this is Section 3.</p>
-            </div>
-            <div class="tab-pane" id="tab4">
-              <p>Section 4.</p>
-            </div>
-            <div class="tab-pane" id="tab5">
-              <p>Section 5.</p>
-            </div>
-            <div class="tab-pane" id="tab6">
-              <p>Section 6.</p>
-            </div>
-            <div class="tab-pane" id="tab7">
-              <p>@dashboardanalytics("hello")</p>
-            </div>
-            <div class="tab-pane" id="tab8">
-              @dashboardadmin("Hello")
-            </div>
-            <div class="tab-pane" id="tab9">
-              <p>Section 9.</p>
-            </div>
-          </div>
-        </div>
 
     </div> <!-- /container -->
     

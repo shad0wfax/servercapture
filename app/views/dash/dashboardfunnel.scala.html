@@ -1,0 +1,150 @@
+@(msg: String)
+    
+ <div class="tabbable tabs-left" style="margin-bottom: 18px;">
+   <ul class="nav nav-tabs">
+     <li class="active"><a href="#admintab1" data-toggle="tab">About</a></li>
+     <li><a href="#admintab2" data-toggle="tab">New Funnel</a></li>
+     <li><a href="#admintab3" data-toggle="tab">Your Funnels</a></li>
+   </ul>
+   <div class="tab-content"">
+     <div class="tab-pane  active" id="admintab1">
+       <p>Support Funnels are mechanisms by which you can collect feedback or issues from your customers.
+       You can choose the means of customer engagement you want on your website or on the mobile device.</p> 
+       <p>Once you decide them, you can generate a simple javascript code that you can install on your website. 
+       Our mobile app automatically picks your latest funnel configuration.</p>
+       <p>Funnels are meant to provide an array of tools to let your customers reach you. 
+       The issues/feedback collected via the funnels you setup are reported on the Dashboard.</p>
+       <p>Create a New Funnel if you don't have one already: <a class="btn btn-primary btn-small" href="#admintab2" data-toggle="tab">New Funnel</a></p>
+     </div>
+     <div class="tab-pane" id="admintab2">
+		       
+		<form class="form-horizontal">
+		  <legend>Create a new Funnel  <span class="label label-warning">This is only a demo</span></legend>
+	 	   <p>Choose your engagement options:</p>  
+
+			<section id="generated-funnel" style="display: none;">
+				<div class="alert alert-warning">
+				  <button type="button" class="close" data-dismiss="alert">&times;</button>
+				  Copy this javascript code and paste it on your site html to start engaging with your customers.
+				</div>
+				<pre>
+&lt;script type=&quot;text/javascript&quot;&gt;
+   var _visualrendezvousconfig = {
+      apiKey: 'PROJECT_API_KEY_FROM_ADMIN_SCREEN',
+      highlight: true,
+      photo: true,
+      speech2text: true,
+      audio: true
+      valign: 'bottom',
+      halign: 'right',
+      lang: 'en'
+   }; 
+   (function() {
+	  var s = document.createElement('script');
+	  s.type = 'text/javascript';
+	  s.async = true;
+	  s.src = '//js.visualrendezvous.com/vrendezvous.js';
+	  var x = document.getElementsByTagName('head')[0];
+	  x.appendChild(s);
+   })();
+&lt;/script&gt;
+				</pre>
+			</section>	  
+
+		   <table class="table table-striped">
+			  <thead>
+			    <tr>
+			      <th>Engagement Type</th>
+			      <th>Web</th>
+			      <th>Mobile</th>
+			    </tr>
+			  </thead>
+			  <tbody>
+			    <tr>
+			      <td><label class="checkbox ">Form / Email</label></td>
+			      <td><input type="checkbox" id="inlineCheckbox1" value="option1"></td>
+			      <td><input type="checkbox" id="inlineCheckbox1" value="option1"></td>
+			    </tr>
+			    <tr>
+			      <td><label class="checkbox ">Photo</label></td>
+			      <td><input type="checkbox" id="inlineCheckbox1" value="option1"></td>
+			      <td><input type="checkbox" id="inlineCheckbox1" value="option1"></td>
+			    </tr>
+			    <tr>
+			      <td><label class="checkbox ">Audio</label></td>
+			      <td><input type="checkbox" id="inlineCheckbox1" value="option1"></td>
+			      <td><input type="checkbox" id="inlineCheckbox1" value="option1"></td>
+			    </tr>
+			    <tr>
+			      <td><label class="checkbox ">Video</label></td>
+			      <td><input type="checkbox" id="inlineCheckbox1" value="option1"></td>
+			      <td><input type="checkbox" id="inlineCheckbox1" value="option1"></td>
+			    </tr>
+			    <tr>
+			      <td><label class="checkbox ">Highlight</label></td>
+			      <td><input type="checkbox" id="inlineCheckbox1" value="option1"></td>
+			      <td></td>
+			    </tr>
+			    <tr>
+			      <td><label class="checkbox ">Speech To Text</label></td>
+			      <td><input type="checkbox" id="inlineCheckbox1" value="option1"></td>
+			      <td></td>
+			    </tr>
+			    <tr>
+			      <td><label class="checkbox ">Screen Sharing</label></td>
+			      <td><input type="checkbox" id="inlineCheckbox1" value="option1"></td>
+			      <td></td>
+			    </tr>
+			  </tbody>
+			</table>
+			<button id="generate-funnel" type="button" class="btn btn-primary">Create Funnel</button>
+		</form>       
+       
+     </div>
+  
+     <div class="tab-pane" id="admintab3">
+       <section>
+		<div class="alert alert-warning">
+		  <button type="button" class="close" data-dismiss="alert">&times;</button>
+		  Here is your current funnel code. In the future you can have more than one funnel for a single domain.
+		</div>
+		<pre>
+&lt;script type=&quot;text/javascript&quot;&gt;
+   var _visualrendezvousconfig = {
+      apiKey: 'PROJECT_API_KEY_FROM_ADMIN_SCREEN',
+      highlight: true,
+      photo: true,
+      speech2text: true,
+      audio: true
+      valign: 'bottom',
+      halign: 'right',
+      lang: 'en'
+   }; 
+   (function() {
+	  var s = document.createElement('script');
+	  s.type = 'text/javascript';
+	  s.async = true;
+	  s.src = '//js.visualrendezvous.com/vrendezvous.js';
+	  var x = document.getElementsByTagName('head')[0];
+	  x.appendChild(s);
+   })();
+&lt;/script&gt;
+		</pre>
+	  </section>	  
+        
+     </div>
+  
+  </div>
+ </div><!-- /container -->
+ 
+<script type="text/javascript">
+ $(document).ready(function () {
+     $('#generate-funnel').click(function (e) {
+         //e.preventDefault();
+         $('#generated-funnel').css('display', 'block');
+         //$('#generated-funnel').addClass('display');
+     });            
+ });
+</script>
+ 
+ 
