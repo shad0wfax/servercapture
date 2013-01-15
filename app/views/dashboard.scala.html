@@ -1,8 +1,10 @@
 @(message: String)
 
 @main(title = message) {
+	<link rel="stylesheet" href="@routes.Assets.at("css/bootstrap-toggle-animated.css")"  type="text/css" media="screen" />
 	<!-- Need bootstrap.js for tabs -->
 	<script src="@routes.Assets.at("js/bootstrap.min.js")"></script>
+	<script src="@routes.Assets.at("js/bootstrap-toggle.js")"></script>
 	    
  	@topnav("", "active")	
  
@@ -25,6 +27,7 @@
           <ul class="nav nav-tabs">
             <li class="active"><a href="#tab1" data-toggle="tab">Funnels</a></li>
             <li><a href="#tab2" data-toggle="tab">Services</a></li>
+            <li><a href="#tab10" data-toggle="tab">Administration</a></li>
             <li><a href="#tab3" data-toggle="tab">Highlights</a></li>
             <li><a href="#tab4" data-toggle="tab">Photos</a></li>
             <li><a href="#tab5" data-toggle="tab">Speech To Texts</a></li>
@@ -32,14 +35,13 @@
             <li><a href="#tab7" data-toggle="tab">Videos</a></li>
             <li><a href="#tab8" data-toggle="tab">All</a></li>
             <li><a href="#tab9" data-toggle="tab">Analytics</a></li>
-            <li><a href="#tab10" data-toggle="tab">Administration</a></li>
           </ul>
           <div class="tab-content" style="padding-bottom: 9px; border-bottom: 1px solid #ddd;">
             <div class="tab-pane  active" id="tab1">
               @dash.dashboardfunnel("hello")
             </div>
             <div class="tab-pane" id="tab2">
-              <p>List all highlights collected here.</p>
+              @dash.dashboardservices("hello")
             </div>
             <div class="tab-pane" id="tab3">
               <p>All photos here</p>
@@ -83,3 +85,7 @@
     </div> <!-- /container -->
     
 }
+
+
+
+

@@ -82,7 +82,7 @@ window.snapPhoto = function( options ) {
 
     // default properties
     options.label = options.label || "Photo";
-    options.header = options.header || "Click a Photo";
+    options.header = options.header || "Send Photo feedback";
     options.url = options.url || "/capimg";
     options.adapter = options.adapter || new window.snapPhoto.XHR( options.url );
     
@@ -91,12 +91,12 @@ window.snapPhoto = function( options ) {
     options.sendLabel = options.sendLabel || "Send";
     options.closeLabel = options.closeLabel || "Close";
     
-    options.messageSuccess = options.messageSuccess || "Your feedback was sent succesfully.";
+    options.messageSuccess = options.messageSuccess || "We have received your photo feedback/issue. If you supplied an email, a copy of what you sent us will be emailed to you. We will get back to you shortly on this.";
     options.messageError = options.messageError || "There was an error sending your feedback to the server.";
     
     options.emailLabel =  options.emailLabel || "Email adress (optional)";
     options.feedbackLabel =  options.feedbackLabel || "Additional comments (optional)";
-    options.takeAPictureMsg =  options.takeAPictureMsg || "Clicking on the button will start your webcam and prompt you to grant it permission. You can cancel anytime.";
+    options.takeAPictureMsg =  options.takeAPictureMsg || "Click the button \"Turn on Webcam\" to start your webcam. You will be prompted you to grant permission. You can click \"Turn off Webcam\" or \"Send\" to turn off the Webcam.";
     options.takeAPictureLabel =  options.takeAPictureLabel || "Click";
     options.webcamOnLabel =  options.webcamOnLabel || "Turn on Webcam";
     options.webcamOffLabel =  options.webcamOffLabel || "Turn off Webcam";
@@ -331,13 +331,6 @@ window.snapPhoto.Photo.prototype.start = function( modal, modalHeader, modalFoot
         var localstream, startbutton, webcambutton;
         var nextBtnFn = nextButton.onclick;
         
-        // Akshay test
-        cancelbuttonClickFunction = function( e ) {
-            e.preventDefault();
-            $this.close.apply();
-            // TODO: MAKE THIS WORK!
-        },
-
         webcamButtonClickFunction = function(e) {
             e.preventDefault();
             

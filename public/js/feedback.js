@@ -84,7 +84,7 @@ window.Feedback = function( options ) {
 
     // default properties
     options.label = options.label || "Highlight";
-    options.header = options.header || "Visual feedback about this web page";
+    options.header = options.header || "Visual feedback";
     // options.url = options.url || "http://127.0.0.1.xip.io:9000/capimg";
     options.url = options.url || "/capimg";
     options.adapter = options.adapter || new window.Feedback.XHR( options.url );
@@ -94,11 +94,17 @@ window.Feedback = function( options ) {
     options.sendLabel = options.sendLabel || "Send";
     options.closeLabel = options.closeLabel || "Close";
     
-    options.messageSuccess = options.messageSuccess || "Your feedback was sent succesfully.";
+    options.highblackLabel = options.highblackLabel || "Highlight or blackout important information by clicking on the page elements.";
+    options.messageSuccess = options.messageSuccess || "We have received your highlighted feedback. If you supplied an email, a copy of what you sent us will be emailed to you. We will get back to you shortly on this.";
     options.messageError = options.messageError || "There was an error sending your feedback to the server.";
     
     options.emailLabel =  options.emailLabel || "Email adress (optional)";
     options.feedbackLabel =  options.feedbackLabel || "Additional comments (optional)";
+    
+    options.highlightLabelOff =  options.highlightLabelOff || "Highlight is Off";
+    options.blackoutLabelOff =  options.blackoutLabelOff || "Blackout is Off";
+    options.highlightLabelOn =  options.highlightLabelOn || "Highlight is On";
+    options.blackoutLabelOn =  options.blackoutLabelOn || "Blackout is On";
   
     if (options.pages === undefined ) {
         options.pages = [
@@ -568,15 +574,23 @@ window.Feedback.Screenshot.prototype.start = function( modal, modalHeader, modal
         highlightContainer = this.highlightContainer,
         removeElement,
         ctx = highlightBox.getContext("2d"),
+        blOn = this.options.blackoutLabelOn,
+        hiOn = this.options.highlightLabelOn,
+        blOff = this.options.blackoutLabelOff,
+        hiOff = this.options.highlightLabelOff,
         buttonClickFunction = function( e ) {
             e.preventDefault();
             
             if (blackoutButton.className.indexOf("active") === -1) {
                 blackoutButton.className += " active";
                 highlightButton.className = highlightButton.className.replace(/active/g,"");
+                blackoutButton.firstChild.nodeValue = blOn;
+                highlightButton.firstChild.nodeValue = hiOff;
             } else {
                 highlightButton.className += " active";
                 blackoutButton.className = blackoutButton.className.replace(/active/g,"");
+                highlightButton.firstChild.nodeValue = hiOn;
+                blackoutButton.firstChild.nodeValue = blOff;
             }
 
             action = !action;
@@ -600,16 +614,17 @@ window.Feedback.Screenshot.prototype.start = function( modal, modalHeader, modal
             highlightClose.style.top =  "-50px";
 
         },
-        blackoutButton = element("a", "Blackout"),
-        highlightButton = element("a", "Highlight"),
+        blackoutButton = element("a", this.options.blackoutLabelOff),
+        highlightButton = element("a", this.options.highlightLabelOn),
         previousElement;
 
+        var btnGrp = document.createElement("div");
+        btnGrp.className = "btn-grp";
+        btnGrp.setAttribute("data-toggle", "buttons-radio");
 
         modal.className += ' feedback-animate-toside';
 
-
         highlightClose.id = "feedback-highlight-close";
-
 
         highlightClose.addEventListener("click", function(){
             removeElement.parentNode.removeChild( removeElement );
@@ -625,20 +640,22 @@ window.Feedback.Screenshot.prototype.start = function( modal, modalHeader, modal
 
         var buttonItem = [ highlightButton, blackoutButton ];
 
-        this.dom.appendChild( element("p", "Highlight or blackout important information") );
+        this.dom.appendChild( element("p", this.options.highblackLabel) );
 
         // add highlight and blackout buttons
         for (var i = 0; i < 2; i++ ) {
-            buttonItem[ i ].className = 'feedback-btn feedback-btn-small ' + (i === 0 ? 'active' : 'feedback-btn-inverse');
+            //buttonItem[ i ].className = 'feedback-btn feedback-btn-small ' + (i === 0 ? 'active' : 'feedback-btn-inverse');
+        	buttonItem[ i ].className = 'btn btn-primary btn-small ' + (i === 0 ? 'active' : 'feedback-btn-inverse');
 
             buttonItem[ i ].href = "#";
             buttonItem[ i ].onclick = buttonClickFunction;
 
-            this.dom.appendChild( buttonItem[ i ] );
+            btnGrp.appendChild( buttonItem[ i ] );
 
-            this.dom.appendChild( document.createTextNode(" ") );
+            btnGrp.appendChild( document.createTextNode(" ") );
 
         }
+        this.dom.appendChild(btnGrp);
 
 
 

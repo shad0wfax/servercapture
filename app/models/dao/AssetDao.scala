@@ -62,8 +62,8 @@ object AssetDao {
   }
   
   def create(s2t: Speech2Text): Speech2Text = {
-    saveAsset(s2t)
-    .asInstanceOf[Speech2Text]
+    val insertId = saveAsset(s2t)
+    s2t.copy(id = insertId)
   }
   
   private def saveAsset(asset: Asset): Long = {

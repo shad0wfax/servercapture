@@ -89,7 +89,7 @@ window.audio = function( options ) {
     options.sendLabel = options.sendLabel || "Send";
     options.closeLabel = options.closeLabel || "Close";
     
-    options.messageSuccess = options.messageSuccess || "Your feedback was sent succesfully.";
+    options.messageSuccess = options.messageSuccess || "We have received your audio feedback/issue. If you supplied an email, a copy of what you sent us will be emailed to you. We will get back to you shortly on this.";
     options.messageError = options.messageError || "There was an error sending your feedback to the server.";
     
     options.emailLabel =  options.emailLabel || "Email adress (optional)";

@@ -89,13 +89,13 @@ window.speech2Text = function( options ) {
     options.sendLabel = options.sendLabel || "Send";
     options.closeLabel = options.closeLabel || "Close";
     
-    options.messageSuccess = options.messageSuccess || "Your feedback was sent succesfully.";
+    options.messageSuccess = options.messageSuccess || "We have received your speech to text feedback/issue. If you supplied an email, a copy of what you sent us will be emailed to you. We will get back to you shortly on this.";
     options.messageError = options.messageError || "There was an error sending your feedback to the server.";
     
     options.emailLabel =  options.emailLabel || "Email adress (optional)";
     options.feedbackLabel =  options.feedbackLabel || "Additional comments (optional)";
     options.speakMsg1 =  options.speakMsg1 || "1. Click on Start to enable microphone. You will see a microphone button once started. For best results use a headset.";
-    options.speakMsg2 =  options.speakMsg2 || "2. Click on the microphone button to start speaking. Click on Stop to terminate recording anytime.";
+    options.speakMsg2 =  options.speakMsg2 || "2. Click on the microphone button and speak. Click on Stop to end the recording anytime.";
     options.speakOnLabel =  options.speakOnLabel || "Enable Mic";
     options.speakOffLabel =  options.speakOffLabel || "Stop";
     options.speakPlaceholder =  options.speakPlaceholder || "The speech converted to text will be placed here. You can edit it before sending the text.";

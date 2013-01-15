@@ -1,30 +1,108 @@
 @(msg: String)
     
- <div class="tabbable tabs-left" style="margin-bottom: 18px;">
-   <ul class="nav nav-tabs">
-     <li class="active"><a href="#admintab1" data-toggle="tab">About</a></li>
-     <li><a href="#admintab2" data-toggle="tab">Your Funnels</a></li>
-     <li><a href="#admintab3" data-toggle="tab">New Funnel</a></li>
-   </ul>
-   <div class="tab-content" style="padding-bottom: 9px; border-bottom: 1px solid #ddd;">
-     <div class="tab-pane  active" id="admintab1">
-       <p>Support Funnels are mechanisms by which you can collect feedback or issues from your customers.
-       You can choose the means of customer engagement you want on your website or over the mobile device.</p> 
-       <p>Once you choose them, you can generate a simple javascript code that you can install on your website. 
-       Our mobile app automatically picks your latest funnel configuration.</p>
-       <p>Funnels are meant to provide an array of tools to let your customers reach you. 
-       The issues/feedback collected via the funnels you setup are reported on the Dashboard.</p>
-       <p>To get started, choose "New Funnel" to create a funnel, or "Your Funnel" to review/edit current funnels.</p>
-     </div>
-     <div class="tab-pane" id="admintab2">
-       <p>Howdy, I'm in Section 2.</p>
-     </div>
-     <div class="tab-pane" id="admintab3">
-       <p>What up girl, this is Section 3.</p>
-     </div>
-     <div class="tab-pane" id="admintab4">
-       <p>Section 4.</p>
-     </div>
+ <div>
+  <p>Enable one or more Service. Services provide you a complete Customer Support Platform.</p>
+  <span class="label label-info">Note:</span> You don't need to have an active service. You can get all your funnel data right here on the Dashboard. 
+  <div class="well well-small">
+  	Combined with Funnels, Services will offer you a platform for rich interaction with your customers and foster a community.
   </div>
- </div>
+  
+<div>
+	<p>Choose the services you want: <span class="label label-warning">This is only a demo, more services will be added.</span></p>
+	<div id="saved-services" class="alert alert-warning" style="display: none;">
+	  <button type="button" class="close" data-dismiss="alert">&times;</button>
+	  Your Services preference have been updated. Your services links are: {todolink}, {todolink}, {todolink}
+	</div>
+	
+	<form>
+	  	<table class="table table-striped">
+		  <thead>
+		    <tr>
+		      <th>Services</th>
+		      <th>Enabled?</th>
+		      <th>Allow Funnel updates?</th>
+		    </tr>
+		  </thead>
+		  <tbody>
+		    <tr>
+		      <td><label>Discussion Forum</label></td>
+		      <td>
+		      	<div class='toggle basic' data-enabled="ON" data-disabled="OFF" data-toggle="toggle">
+				  <input type="checkbox" value="1" name="myCheckbox" class="checkbox" checked="checked" />
+				  <label class="check" for="myCheckbox"></label>
+				</div>
+		      </td>
+		      <td>
+		      	<div class='toggle basic' data-enabled="ON" data-disabled="OFF" data-toggle="toggle">
+				  <input type="checkbox" value="1" name="myCheckbox" class="checkbox" />
+				  <label class="check" for="myCheckbox"></label>
+				</div>
+		      </td>
+		    </tr>
+		    <tr>
+		      <td><label>Knowledge Base</label></td>
+		      <td>
+		      	<div class='toggle basic' data-enabled="ON" data-disabled="OFF" data-toggle="toggle">
+				  <input type="checkbox" value="1" name="myCheckbox" class="checkbox" checked="checked" />
+				  <label class="check" for="myCheckbox"></label>
+				</div>
+		      </td>
+		      <td>
+		      	<div class='toggle basic' data-enabled="ON" data-disabled="OFF" data-toggle="toggle">
+				  <input type="checkbox" value="1" name="myCheckbox" class="checkbox" checked="checked" />
+				  <label class="check" for="myCheckbox"></label>
+				</div>
+		      </td>
+		    </tr>
+		    <tr>
+		      <td><label>Idea and Feedback System</label></td>
+		      <td>
+		      	<div class='toggle basic' data-enabled="ON" data-disabled="OFF" data-toggle="toggle">
+				  <input type="checkbox" value="1" name="myCheckbox" class="checkbox" />
+				  <label class="check" for="myCheckbox"></label>
+				</div>
+		      </td>
+		      <td>
+		      	<div class='toggle basic' data-enabled="ON" data-disabled="OFF" data-toggle="toggle">
+				  <input type="checkbox" value="1" name="myCheckbox" class="checkbox" />
+				  <label class="check" for="myCheckbox"></label>
+				</div>
+		      </td>
+		    </tr>
+		  </tbody>
+		</table>
+		<button id="save-services" type="button" class="btn btn-primary">Save</button>
+	</form>	                
+</div>	  
+                
+  
+ </div><!-- /container -->
+
+<script type="text/javascript">
+ 
+ $(document).ready(function () {
+	 $('.basic').toggleSlide({
+	     style: {
+	       enabled: 'primary',
+	       disabled: 'danger'
+	     },
+	     text: {
+	          enabled: 'Yes',
+	          disabled: 'No'
+	        },
+	   });
+	 
+     $('#save-services').click(function (e) {
+         //e.preventDefault();
+         $('#saved-services').css('display', 'block');
+         //$('#generated-funnel').addClass('display');
+     });            
+	 
+ });
+	
+</script>
+ 
+ 
+
+
  
