@@ -9,6 +9,7 @@ import play.api.libs.json.JsValue
 import play.api.libs.json.Json
 import java.util.Date
 import models.email.Emailer
+import models.dao.AssetDao
 
 /**
  * @author Akshay Sharma

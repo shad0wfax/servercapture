@@ -1,4 +1,4 @@
-@(message: String)
+@(message: String, assets: Seq[Asset])
 
 @main(title = message) {
 	<link rel="stylesheet" href="@routes.Assets.at("css/bootstrap-toggle-animated.css")"  type="text/css" media="screen" />
@@ -11,7 +11,7 @@
  
     <div class="container">
       <div class="page-header">
-        <h2>Dashboard - Helpdesk and Administration tool</h2>
+        <h4>Dashboard - Helpdesk and Administration tool in the cloud</h4>
       </div>
 
 		<div>
@@ -44,22 +44,22 @@
               @dash.dashboardservices("hello")
             </div>
             <div class="tab-pane" id="tab3">
-              <p>All photos here</p>
+              @dash.dashboardfeedbackitems(assets,"web#highlight")
             </div>
             <div class="tab-pane" id="tab4">
-              <p>Feedback sent via speech to text</p>
+              @dash.dashboardfeedbackitems(assets,"web#photo")
             </div>
             <div class="tab-pane" id="tab5">
-              <p>Audio feedback</p>
+              @dash.dashboardfeedbackitems(assets,"web#speech2text")
             </div>
             <div class="tab-pane" id="tab6">
-              <p>Video feedback collected. Coming soon...</p>
+              @dash.dashboardfeedbackitems(assets,"web#audioflash")
             </div>
             <div class="tab-pane" id="tab7">
-              <p>All feedback so far.</p>
+              <p>Coming soon...</p>
             </div>
             <div class="tab-pane" id="tab8">
-              <p>Account activities.</p>
+              @dash.dashboardfeedbackitems(assets)
             </div>
             <div class="tab-pane" id="tab9">
               @dash.dashboardanalytics("hello")
@@ -76,9 +76,9 @@
         
 	        <p>
 	        	This demo Dashboard page shows the content an Admin of the website (our customer) will see. 
-	        	Each company will get its own Dashboard and can perform several tasks from here. 
+	        	Every company will get its own Dashboard and can perform several tasks from here. 
 	         </p>
-			<span class="label label-inverse">For this demo, Dashboard is built on the data collected from the demo page.</span><br/> 
+			<span class="label label-inverse">For this demo, Dashboard is built on the data collected from the Demo-Client page.</span><br/> 
 			<span class="label label-inverse">The Dashboard has many placeholder items and will constantly evolve as we ship features.</span>
 		</div>
 

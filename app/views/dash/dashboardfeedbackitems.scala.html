@@ -1,0 +1,43 @@
+@(assets:Seq[Asset], ref: String = "")
+@import java.text.SimpleDateFormat
+
+ @icnsrc(asset: Asset) = {
+   "/stream?aid=" + asset.assetId + "&xtn=wav&type=audio"
+ }
+
+ <div>
+ 
+	<table class="table table-striped">
+	  <thead>
+	    <tr>
+	      <th>Type</th>
+	      <th>Email</th>
+	      <th>Comment</th>
+	      <th>Date</th>
+	    </tr>
+	  </thead>
+	  <tbody>
+	  	@for(asset <- assets) {
+	  		@if(asset.ref == ref) {
+	  	 	   <tr>
+		  		@if(asset.assetType == "image") {
+		  			<td><img src="/stream?aid=@asset.content&xtn=png&type=image" class="img-rounded" width="140px" height="140px"/></td>
+		  		} else {
+		  			@if(asset.assetType == "audio") {
+		  				<td><audio controls="controls"><source src="/stream?aid=@asset.content&xtn=wav&type=audio" /></audio></td>
+		  			} else {
+		  				<td><img src="/assets/img/favicon.ico" /></td>
+		  			}
+		  		}
+				  	<td>@asset.email</td>
+				  	<td>@asset.comment.substring(0, Math.min(asset.comment.length(), 27))...</td>
+				  	<td>@{new SimpleDateFormat("MMM-dd-yyyy").format(asset.created)}</td>
+				  </tr>
+			}
+	  	}
+		  
+	  </tbody>
+	</table>
+
+</div>
+ 

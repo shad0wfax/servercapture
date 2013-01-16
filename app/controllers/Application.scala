@@ -4,10 +4,11 @@
 package controllers
 
 import scala.concurrent.duration.DurationInt
-
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import play.api.mvc.Action
 import play.api.mvc.Controller
+import models.dao.AssetDao
+import models.Asset
 
 //
 
@@ -22,7 +23,8 @@ object Application extends Controller {
   }
   
   def dashboard = Action {
-    Ok(views.html.dashboard("Dashboard - VisualRendezvous"))
+    val assets:Seq[Asset] = AssetDao.all.sortWith((s, t) => s.created.compareTo(t.created) > 0)
+    Ok(views.html.dashboard("Dashboard - VisualRendezvous", assets))
   }
   
   def how = Action {
@@ -35,6 +37,10 @@ object Application extends Controller {
   
   def usecase = Action {
     Ok(views.html.usecase("Usecases - VisualRendezvous"))
+  }
+  
+  def features = Action {
+    Ok(views.html.features("Features - VisualRendezvous"))
   }
   
 }

@@ -7,6 +7,19 @@
  	@topnav("", "", "active")	
  
     <div class="container">
+		<div>
+	    	<div class="wizard">
+			    <a href="#signup"><span class="badge badge-inverse">1</span>Sign Up</a>
+			    <a href="#funnel"><span class="badge badge-inverse">2</span>Create Funnels</a>
+			    <a href="#install"><span class="badge badge-inverse">3</span>Install Javascript</a>
+			    <a href="#services"><span class="badge badge-inverse">4</span>Enable Services</a>
+			    <a href="#custfeedback"><span class="badge badge-inverse">5</span>Get Feedback</a>
+			    <a href="#dashboard"><span class="badge badge-inverse">6</span>Respond</a> 
+			</div>
+		</div>
+
+
+
 
   		<div class="container-fluid">
 		  <div class="row-fluid">
@@ -22,22 +35,30 @@
 			  <li class="divider"></li>
 			  <li><a href="#services">Choose Services</a></li>
 			  <li class="divider"></li>
+			  <li><a href="#custfeedback">Customer Feedback</a>
+			  	<ul class="nav nav-list">
+			  	  <li><a href="#cf-highlight">Highlight</a></li>
+			  	  <li><a href="#cf-photo">Photo</a></li>
+			  	  <li><a href="#cf-s2t">Speech to Text</a></li>
+			  	  <li><a href="#cf-audio">Audio</a></li>
+			  	  <li><a href="#cf-video">Video</a></li>
+			  	  <li><a href="#cf-scrnrec">Screen Recording</a></li>
+			  	</ul>
+			  </li>
+			  <li class="divider"></li>
 			  <li><a href="#dashboard">Dashboard</a></li>
 			  <li class="divider"></li>
 			</ul>
 		      
 		    </div>
 		    <div class="span9">
-		     <div class="well well-small">
-			  <p class="lead">Our platform - Customer Support as a Service</p>
-		     </div>
 		        <section id="signup">
 		          <div class="page-header">
 		            <h4>Sign up!</h4>
 		          </div>
 		          <p>
-		          When you sign up, you will be taken to the Dashboard page. You will be automatically assigned an "API KEY" (located in the Administration tab of Dashboard).<br/>  
-		          You can perform the following tasks to get started quickly:
+		          When you sign up, you will be taken to the Dashboard page.<br/> 
+		          You will be automatically assigned an "API KEY" (located in the Administration tab of Dashboard) and can perform the following tasks to get started:
 		          <ul>
 		          	<li>Create a New Funnel</li>
 		          	<li>Install Funnel Javascript (for Web Engagement only)</li>
@@ -52,9 +73,9 @@
 		          </div>
 		          <ul>
 			          <li>To get started you have to create a Funnel for your website / service.</li> 
-			          <li>Funnel helps you choose the way in which you want to engage with your customers. You might want certain mechanisms turned on or off. </li>
-			          <li>Creating a new Funnel will give you basic Javascript code that you can then install on your website.</li>
-			          <li>If you want to be only use Mobile Engagement, you need not install Javascript. We encourage a full experience for your customers and recommend Web Engagement as well.</li>
+			          <li>Funnels help you choose the way in which you want to engage with your customers. You might want certain mechanisms turned on or off. </li>
+			          <li>Creating a new Funnel will give you the basic Javascript code that you can install on your website.</li>
+			          <li>We encourage both Web and Mobile Engagement for a complete customer experience.</li>
 		          </ul>
 		        </section>
 		
@@ -94,9 +115,11 @@
 		          <div class="page-header">
 		            <h4>Choose Services</h4>
 		          </div>
-		          <p>We offer some out of the box services for your company to get started. As we perceive it, we want to be one single place for your entire customer interaction.
-		          You can also configure your funnel elements to automatically show up on the services that you choose.</p>
-		          <p><span class="label label-warning">Services combined with Funnel are necessary and sufficient systems for a Startup to have a Customeer Support Platform.</span>
+		          <p>We provide an end-to-end solution for Customer Support and Service operations for your company.<br/>
+		          
+		          We offer out of the box services to get started.
+		          You can also configure your funnel elements to automatically show up on the Services that you choose.</p>
+		          <p><span class="label label-warning">Services combined with Funnels are necessary and sufficient systems for an effective Customer Support Platform.</span>
 		          <p>Some out of the box services we offer (not all encompassing:)</p>
 		          <ul>
 		          	<li>Discussion Forums</li>
@@ -105,12 +128,71 @@
 		          </ul> 
 		        </section>
 		
+		        <section id="custfeedback">
+		          <div class="page-header">
+		            <h4>Gather Customer Feedback</h4>
+		          </div>
+		          <p>Now that you have installed the Javascript code on your website, you can expect your customers to send you feedback or report issues using the Visual Rendezvous tools.
+		          Customers and Users of your website can send rich feedback via Web or Mobile devices. All the feedback/issues you receive will be available on the Dashboard for you and you 
+		          will be alerted according to your Notifications setup. You will have several means to respond or take action and you will have the same tools as your customers in case you 
+		          have to respond to them. From our experience using visual or verbal means resolve issues much quicker.
+		          </p>
+		          <p>Here are some ways in which your Customers/Users will send you feedback or report issues:</p>
+
+		          <section id="cf-highlight">
+		          	<h4>Highlights</h4>
+		          	<p>Let your customers send you visual feedback on the web page they are on. They can highlight parts of the page and blackout any sensitive information. You
+		          	will receive a snapshot of what your customers saw as an image. A support person can quickly resolve an issue 
+		          	if he has visual clues of what a customer is facing. Highlights are the best way to gather them.
+		          	</p>
+		          	<p>We will keep improving highlights to provide you with the most relevant information and over a period of time automatically suggest you solutions.</p>
+		          </section>
+
+		          <section id="cf-photo">
+		          	<h4>Photo</h4>
+		          	<p>It is very easy today to capture a picture on a mobile device or even a web browser (WebRTC). A picture conveys more meaning than a text blurb describing an issue.
+		          	Let your customers send you pictures of their issues or give you visual feedback. Your support team will be able to respond much better and quicker with visual clues.
+		          	</p>
+		          	<p>
+		          	You can use this Photo feature not just for issue reporting, but also in other creative ways. Crowdsource images about your brand - go social.
+		          	</p>
+		          </section>
+		          
+		          <section id="cf-s2t">
+		          	<h4>Speech to Text</h4>
+		          	<p>This is an experimental feature using Google's Speech API. It is just a mere convenience for your customers.</p>
+		          </section>
+
+		          <section id="cf-audio">
+		          	<h4>Audio</h4>
+		          	<p>Let your customers send you audio messages. Think of it as a voicemail. It is easy for someone to describe the problem they are facing than typing a long message about it.
+		          	You don't have to let your customer reach you via phone or be on hold. Let them tell you their problem sooner.
+		          	</p>
+		          	<p>Don't just stop at receiving audio messages from the customer, respond to them with it! It is like an asynchronous voice conversation and can be done at your convenience as you see fit.
+		          	Our service will notify all parties involved everytime there is a new message.
+		          	</p>
+		          </section>
+
+		          <section id="cf-video">
+		          	<h4>Video</h4>
+		          	<p>Allow your customers to go visual! We are working on this at the moment, and are keeping a close track on WebRTC to evolve to implement a non-flash solution.</p>
+		          </section>
+
+		          <section id="cf-scrnrec">
+		          	<h4>Screen Recording</h4>
+		          	<p>Your customer have an issue? Let them record what they are seeing and send it to you without having to install applications.
+		          	We are working on this at the moment, and are keeping a close track on WebRTC to evolve to implement a non-flash solution.
+		          	</p>
+		          </section>
+
+		        </section>
+
 		        <section id="dashboard">
 		          <div class="page-header">
 		            <h4>Dashboard and Administration</h4>
 		          </div>
-		          <p>Once you have performed the tasks as described above, you are ready to act on the feedback/issues gathered. The Administration page helps you perform several 
-		          tasks that makes our product a very effective web based Helpdesk.</p>
+		          <p>Our Dashboard provides you with an all encompassing Helpdesk platform. You can review and respond right from within the Dashboard from any device.
+		          All the high-resolution mechanisms are at your disposable to connect back with your customer.</p>
 		          <p>A glimpse of things you can do from the Dashboard, including Administration:</p>
 		          <ul>
 		          	<li>Review, follow up, and act on every feedback/issue gather via any funnel element.</li>

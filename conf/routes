@@ -10,11 +10,15 @@ GET     /dashboard                           controllers.Application.dashboard
 GET     /how                           controllers.Application.how
 GET     /about                           controllers.Application.about
 GET     /usecase                           controllers.Application.usecase
+GET     /features                           controllers.Application.features
 
 # Capture stuff
 POST 	/capimg					controllers.capture.Capture.captureImage
 POST 	/captures2t						controllers.capture.Capture.speechToText
 POST 	/captureflaudio						controllers.capture.Capture.captureFlashAudio
+
+# Serve assets
+GET 	/stream						controllers.asset.AssetStreamer.stream(aid:String, xtn:String, type:String)
 
 
 # Map static resources from the /public folder to the /assets URL path

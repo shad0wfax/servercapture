@@ -1,7 +1,7 @@
 /**
  * copyright VisualRendezvous
  */
-package models
+package models.dao
 
 import play.api._
 import play.api.db._
@@ -14,6 +14,12 @@ import java.io.FileOutputStream
 import java.io.File
 import java.util.UUID
 import java.util.Date
+import models.Image
+import models.Audio
+import models.Speech2Text
+import models.Asset
+import models.FileAsset
+import models.CaptureResource
 
 
 /**
