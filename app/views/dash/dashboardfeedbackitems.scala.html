@@ -10,7 +10,11 @@
 	<table class="table table-striped">
 	  <thead>
 	    <tr>
-	      <th>Type</th>
+	      @if(ref == "web#speech2text") {
+	      	<th>Speech to Text</th>
+	      } else {
+	      	<th>Preview</th>
+	      }
 	      <th>Email</th>
 	      <th>Comment</th>
 	      <th>Date</th>
@@ -26,11 +30,11 @@
 		  			@if(asset.assetType == "audio") {
 		  				<td><audio controls="controls"><source src="/stream?aid=@asset.content&xtn=wav&type=audio" /></audio></td>
 		  			} else {
-		  				<td><img src="/assets/img/favicon.ico" /></td>
+		  				<td>@asset.content.substring(0, Math.min(asset.content.length(), 37))...</td>
 		  			}
 		  		}
 				  	<td>@asset.email</td>
-				  	<td>@asset.comment.substring(0, Math.min(asset.comment.length(), 27))...</td>
+				  	<td>@asset.comment.substring(0, Math.min(asset.comment.length(), 47))...</td>
 				  	<td>@{new SimpleDateFormat("MMM-dd-yyyy").format(asset.created)}</td>
 				  </tr>
 			}
