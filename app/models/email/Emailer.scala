@@ -5,14 +5,13 @@ package models.email
 
 import java.io.File
 import java.io.FileInputStream
-
 import org.apache.commons.io.IOUtils
-
 import models.Image
 import models.Speech2Text
 import play.Logger
 import scalaj.http.Http
 import scalaj.http.MultiPart
+import models.Audio
 
 
 /**
@@ -32,6 +31,7 @@ object Emailer {
   private def process(emailable: Emailable) = emailable match {
     case ic: Image => emailImageCapture(ic)
     case s2tc: Speech2Text => emailS2TCapture(s2tc)
+    case ac: Audio => emailAudioCapture(ac)
     case _ => Logger.debug("Unknown Capture type passed: " + emailable + " Will not email");
   }
 
@@ -50,6 +50,16 @@ object Emailer {
       .post(url)
       .auth("api", key)
       .params(sendParams(capture, "Speech to text data sent: \n" + capture.speech2Text))
+      .asString
+      handle(response)
+  }
+  
+  private def emailAudioCapture(capture: Audio) = {
+    val response = Http
+      .post(url)
+      .auth("api", key)
+      .params(sendParams(capture, "Audio content has been sent. A link to it is : " + 
+          "http://demo.visualrendezvous.com:9000/stream?aid=" + capture.content + "&xtn=wav&type=audio"))
       .asString
       handle(response)
   }

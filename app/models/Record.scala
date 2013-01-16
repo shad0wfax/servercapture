@@ -41,7 +41,7 @@ class Record extends Actor {
     Emailer.send(image)
     
     // Testing:
-    println(AssetDao.all(image))
+    Logger.debug("" + AssetDao.all(image))
   }
 
   private def saveS2T(json: JsValue) = {
@@ -60,7 +60,7 @@ class Record extends Actor {
     Emailer.send(s2t)
     
     // Testing:
-    println(AssetDao.all(s2t))
+    Logger.debug("" + AssetDao.all(s2t))
   }
 
   private def saveFlashAudio(json: JsValue) = {
@@ -81,7 +81,7 @@ class Record extends Actor {
     Emailer.send(audio)
     
     // Testing:
-    println(AssetDao.all(audio))
+    Logger.debug("" + AssetDao.all(audio))
   }
 
   private def element(jsonObj: Seq[JsValue]): String = jsonObj match {

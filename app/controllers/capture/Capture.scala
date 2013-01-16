@@ -21,6 +21,7 @@ import org.apache.commons.codec.binary.Base64
 import org.apache.commons.io.IOUtils
 import java.io.FileOutputStream
 import models.CaptureFlashAudio
+import play.Logger
 
 /**
  * @author Akshay Sharma
@@ -65,7 +66,7 @@ object Capture extends Controller {
 	  
 	  Ok("200")
 	}.getOrElse {
-		println("data parameter not sent in the request body")
+		Logger.debug("data parameter not sent in the request body")
     	BadRequest("Expecting urlFormEncoded data request body")  
   	}
     
